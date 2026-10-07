@@ -40,7 +40,7 @@ open class NetworkService(
     @Transactional
     fun findPaths(data: NetworkWithSearch, store: Boolean): Paths {
         val network = Network(data)
-        val paths = data.getSearches().map { ants.external.Path(it, network) }
+        val paths = data.searches.map { ants.external.Path(it, network) }
         val id = data.id()
         if (store) {
             storePaths(id, paths)

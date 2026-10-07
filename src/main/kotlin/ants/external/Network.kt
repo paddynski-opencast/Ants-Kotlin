@@ -27,6 +27,12 @@ open class Network : IRequest, ants.common.Network {
         connections = network.getConnectionData().toMutableList()
     }
 
+    constructor(data: Network) {
+        this.name = data.name
+        this.nodes = data.nodes
+        this.connections = data.connections
+    }
+
     private fun invalidCosts(costs: Collection<Int>) {
         if (costs.any { it < ants.models.Network.INVALID }) Errors.error(NetworkException.ERROR_CONNECT, "Invalid cost(s)!")
     }

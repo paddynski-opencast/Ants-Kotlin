@@ -102,7 +102,7 @@ class TestJson {
 
     @Test fun testControllerFindPathsError() {
         val data = NetworkWithSearch(network())
-        data.getSearches().add(Search(0, 12))
+        data.searches.add(Search(0, 12))
         val response = controller.findPaths(data)
         assertEquals(400, response.statusCode.value())
         val error = response.body as Error

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 class NetworkWithSearch : Network {
     @JsonProperty
-    private val searches = mutableListOf<Search>()
+    val searches = mutableListOf<Search>()
 
     constructor() : super()
     constructor(name: String) : super(name)
@@ -24,6 +24,4 @@ class NetworkWithSearch : Network {
         }
         Errors.error(NetworkException.ERROR_INVALID, "Invalid search!")
     }
-
-    fun getSearches() = searches
 }

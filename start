@@ -1,2 +1,2 @@
-mvn package
+mvn clean package
 java -jar target/Ants-1.0.jar
