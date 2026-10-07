@@ -70,7 +70,7 @@ open class NetworkService(
             network.getId()?.let { networkStore.deleteById(it) }
             pathStore.findAllForHash(network.getHash() ?: "")
                 .mapNotNull { it.getId() }
-                .let(pathStore::deleteAllById)
+                .let { pathStore.deleteAllById(it) }
         }
         return true
     }

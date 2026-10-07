@@ -8,6 +8,8 @@ open class Search() {
     @JsonProperty @JvmField protected var to: Int = Network.INVALID
 
     constructor(from: Int, to: Int) : this() { this.from = from; this.to = to }
+
     fun getFrom() = from
+
     fun getTo() = to
 }

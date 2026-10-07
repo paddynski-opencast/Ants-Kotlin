@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 class Path() : Search() {
     @JsonProperty
-    private var path: List<Int> = emptyList()
+    private var path: List<Int>? = emptyList()
 
     constructor(search: Search, network: Network) : this() {
         from = search.getFrom()
