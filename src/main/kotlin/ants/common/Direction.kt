@@ -1,2 +1,6 @@
 package ants.common
-enum class Direction { A, B }
+
+enum class Direction {
+    A,
+    B
+}

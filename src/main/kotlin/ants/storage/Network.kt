@@ -1,4 +1,5 @@
 package ants.storage
+
 import com.fasterxml.jackson.databind.ObjectMapper
 
 class Network : Entity<ants.external.Network> {

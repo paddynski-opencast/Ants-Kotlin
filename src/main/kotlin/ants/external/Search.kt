@@ -1,4 +1,5 @@
 package ants.external
+
 import ants.models.Network
 import com.fasterxml.jackson.annotation.JsonProperty
 

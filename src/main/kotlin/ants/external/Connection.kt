@@ -1,4 +1,5 @@
 package ants.external
+
 import ants.common.Direction
 import com.fasterxml.jackson.annotation.JsonProperty
 

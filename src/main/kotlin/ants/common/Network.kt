@@ -1,4 +1,5 @@
 package ants.common
+
 interface Network {
     fun getMode(id: Int): Node
     fun addNode(id: Int): Node

@@ -1,4 +1,5 @@
 package ants.external
+
 import com.fasterxml.jackson.annotation.JsonProperty
 
 class Node() : ants.common.Node() {
