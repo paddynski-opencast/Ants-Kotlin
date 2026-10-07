@@ -21,7 +21,7 @@ abstract class AbstractController {
     private fun replaceVarsWithValues(template: String, vars: Map<String, String>): String {
         if (vars.isEmpty()) return template
         var content = template
-        vars.forEach { (key, value) -> content = content.replace("\\{$key\\}".toRegex(), value) }
+        vars.forEach { (key, value) -> content = content.replace("{$key}", value) }
         return content
     }
 }
