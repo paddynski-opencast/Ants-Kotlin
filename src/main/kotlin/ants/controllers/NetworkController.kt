@@ -23,6 +23,7 @@ open class NetworkController(
         const val GETPATHS = "/getPaths"
         const val FINDPATH = "/findPath"
         const val STORE = "/store"
+        const val DEL = "/delete"
         private val logger: Logger = LogManager.getLogger(NetworkController::class.java)
     }
 
@@ -38,10 +39,6 @@ open class NetworkController(
             }
     }
 
-    @RequestMapping(method = [POST], path = [FINDPATHS])
-    fun findPaths(@RequestBody data: NetworkWithSearch): ResponseEntity<IResponse> =
-        findPaths(data, true)
-
     fun findPaths(data: NetworkWithSearch, store: Boolean): ResponseEntity<IResponse> {
         log(data, false)
         return try {
@@ -53,6 +50,10 @@ open class NetworkController(
             }
     }
 
+    @RequestMapping(method = [POST], path = [FINDPATHS])
+    fun findPaths(@RequestBody data: NetworkWithSearch): ResponseEntity<IResponse> =
+        findPaths(data, true)
+
     @RequestMapping(method = [POST], path = [STORE])
     fun store(@RequestBody data: Network): ResponseEntity<IResponse> {
         log(data, false)
@@ -63,15 +64,6 @@ open class NetworkController(
             } catch (e: NetworkException) {
                 error(e)
             }
-    }
-
-    private fun log(data: Loggable, isReturn: Boolean) {
-        val message = if (isReturn) "Return = %s" else "Data   = %s"
-        try {
-            logger.info(message.format(mapper.writeValueAsString(data)))
-        } catch (e: JsonProcessingException) {
-            throw RuntimeException(e)
-        }
     }
 
     @RequestMapping(method = [GET], path = [FINDPATH])
@@ -86,7 +78,7 @@ open class NetworkController(
             }
     }
 
-    @RequestMapping(method = [DELETE], path = ["/delete"])
+    @RequestMapping(method = [DELETE], path = [DEL])
     fun delete(@RequestParam id: String): ResponseEntity<IResponse> {
         log(Id(id), false)
         return try {
@@ -96,6 +88,15 @@ open class NetworkController(
             } catch (e: NetworkException) {
                 error(e)
             }
+    }
+
+    private fun log(data: Loggable, isReturn: Boolean) {
+        val message = if (isReturn) "Return = %s" else "Data   = %s"
+        try {
+            logger.info(message.format(mapper.writeValueAsString(data)))
+        } catch (e: JsonProcessingException) {
+            throw RuntimeException(e)
+        }
     }
 
     private fun error(e: NetworkException): ResponseEntity<IResponse> {
