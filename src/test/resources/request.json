@@ -1,0 +1,83 @@
+{
+  "name": "",
+  "nodes": [
+    {
+      "id": 1,
+      "costA": 0,
+      "costB": 0
+    },
+    {
+      "id": 2,
+      "costA": 0,
+      "costB": 0
+    },
+    {
+      "id": 3,
+      "costA": 0,
+      "costB": 0
+    },
+    {
+      "id": 4,
+      "costA": 0,
+      "costB": 0
+    },
+    {
+      "id": 10,
+      "costA": 0,
+      "costB": 0
+    },
+    {
+      "id": 0,
+      "costA": 0,
+      "costB": 0
+    }
+  ],
+  "connections": [
+    {
+      "from": 4,
+      "to": 1,
+      "direction": "A"
+    },
+    {
+      "from": 3,
+      "to": 1,
+      "direction": "B"
+    },
+    {
+      "from": 1,
+      "to": 0,
+      "direction": "B"
+    },
+    {
+      "from": 2,
+      "to": 1,
+      "direction": "B"
+    },
+    {
+      "from": 1,
+      "to": 3,
+      "direction": "A"
+    },
+    {
+      "from": 1
+    ,"to": 4,
+      "direction": "B"
+    },
+    {
+      "from": 0,
+      "to": 1,
+      "direction": "A"
+    },
+    {
+      "from": 1,
+      "to": 2,
+      "direction": "A"
+    }
+  ],
+  "searches": [
+    {
+      "from": 0,
+      "to": 2
+    }
+  ]
+}
