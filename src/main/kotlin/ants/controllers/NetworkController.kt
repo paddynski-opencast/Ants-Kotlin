@@ -29,24 +29,40 @@ open class NetworkController(
     @RequestMapping(method = [GET], path = [GETPATHS])
     fun getPaths(@RequestParam id: String): ResponseEntity<IResponse> {
         log(Id(id), false)
-        return try { service.getPaths(id).also { log(it, true) }.let { ResponseEntity.ok<IResponse>(it) } }
-        catch (e: NetworkException) { error(e) }
+        return try {
+            service.getPaths(id)
+                .also { log(it, true) }
+                .let { ResponseEntity.ok<IResponse>(it) }
+            } catch (e: NetworkException) {
+                error(e)
+            }
     }
 
     @RequestMapping(method = [POST], path = [FINDPATHS])
-    fun findPaths(@RequestBody data: NetworkWithSearch): ResponseEntity<IResponse> = findPaths(data, true)
+    fun findPaths(@RequestBody data: NetworkWithSearch): ResponseEntity<IResponse> =
+        findPaths(data, true)
 
     fun findPaths(data: NetworkWithSearch, store: Boolean): ResponseEntity<IResponse> {
         log(data, false)
-        return try { service.findPaths(data, store).also { log(it, true) }.let { ResponseEntity.ok<IResponse>(it) } }
-        catch (e: NetworkException) { error(e) }
+        return try {
+            service.findPaths(data, store)
+                .also { log(it, true) }
+                .let { ResponseEntity.ok<IResponse>(it) }
+            } catch (e: NetworkException) {
+                error(e)
+            }
     }
 
     @RequestMapping(method = [POST], path = [STORE])
     fun store(@RequestBody data: Network): ResponseEntity<IResponse> {
         log(data, false)
-        return try { service.storeNetwork(data).also { log(it, true) }.let { ResponseEntity.ok<IResponse>(it) } }
-        catch (e: NetworkException) { error(e) }
+        return try {
+            service.storeNetwork(data)
+                .also { log(it, true) }
+                .let { ResponseEntity.ok<IResponse>(it) }
+            } catch (e: NetworkException) {
+                error(e)
+            }
     }
 
     private fun log(data: Loggable, isReturn: Boolean) {
@@ -61,23 +77,34 @@ open class NetworkController(
     @RequestMapping(method = [GET], path = [FINDPATH])
     fun findPath(@RequestParam id: String, @RequestParam from: Int, @RequestParam to: Int): ResponseEntity<IResponse> {
         log(IdWithSearch(id, from, to), false)
-        return try { service.findPath(id, from, to).also { log(it, true) }.let { ResponseEntity.ok<IResponse>(it) } }
-        catch (e: NetworkException) { error(e) }
-    }
-
-    private fun error(e: NetworkException): ResponseEntity<IResponse> {
-        val error = e.getError()
-        var code = error.code
-        if (code != NOT_FOUND.value()) code = BAD_REQUEST.value()
-        log(error, true)
-        return ResponseEntity.status(code).body(error)
+        return try {
+            service.findPath(id, from, to)
+                .also { log(it, true) }
+                .let { ResponseEntity.ok<IResponse>(it) }
+            } catch (e: NetworkException) {
+                error(e)
+            }
     }
 
     @RequestMapping(method = [DELETE], path = ["/delete"])
     fun delete(@RequestParam id: String): ResponseEntity<IResponse> {
         log(Id(id), false)
         return try {
-            Status(service.delete(id)).also { log(it, true) }.let { ResponseEntity.ok<IResponse>(it) }
-        } catch (e: NetworkException) { error(e) }
+            Status(service.delete(id))
+                .also { log(it, true) }
+                .let { ResponseEntity.ok<IResponse>(it) }
+            } catch (e: NetworkException) {
+                error(e)
+            }
+    }
+
+    private fun error(e: NetworkException): ResponseEntity<IResponse> {
+        val error = e.getError()
+        val code = when(error.code) {
+            NOT_FOUND.value() -> error.code
+            else -> BAD_REQUEST.value()
+        }
+        log(error, true)
+        return ResponseEntity.status(code).body(error)
     }
 }
