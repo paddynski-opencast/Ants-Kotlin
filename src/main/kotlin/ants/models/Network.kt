@@ -15,6 +15,7 @@ class Network : ants.common.Network {
     private val paths = mutableListOf<Path>()
 
     constructor(name: String) { this.name = name }
+
     constructor() : this("")
 
     private constructor(network: Network) {
@@ -22,6 +23,18 @@ class Network : ants.common.Network {
         ants = network.ants
         nodes.addAll(network.nodes)
         paths.addAll(network.paths)
+    }
+
+    constructor(data: ants.external.Network) {
+        name = data.name
+        data.nodes.forEach { addNode(it.id, it.closed) }
+        data.connections.forEach {
+            connect(
+                it.from, it.to,
+                if (it.direction == Direction.A) it.cost else -1,
+                if (it.direction == Direction.B) it.cost else -1
+            )
+        }
     }
 
     private fun invalidCosts(costs: Collection<Int>) {
@@ -55,10 +68,13 @@ class Network : ants.common.Network {
     }
 
     override fun closeNode(id: Int) = setNodeState(id, true)
+
     override fun openMode(id: Int) = setNodeState(id, false)
 
     override fun connect(from: Int, to: Int) = connect(from, to, mapOf(Direction.A to 0, Direction.B to 0))
+
     override fun connect(from: Int, to: Int, cost: Int) = connect(from, to, mapOf(Direction.A to cost))
+
     override fun connect(from: Int, to: Int, costA: Int, costB: Int) =
         connect(from, to, mapOf(Direction.A to costA, Direction.B to costB))
 
@@ -90,6 +106,7 @@ class Network : ants.common.Network {
     override fun toString() = name
 
     fun getNodeData() = nodes.map(Node::getData)
+
     fun getConnectionData() = nodes.asSequence().flatMap(Node::getConnectionData).toList()
 
     @Synchronized internal fun addAnt() { ants++ }

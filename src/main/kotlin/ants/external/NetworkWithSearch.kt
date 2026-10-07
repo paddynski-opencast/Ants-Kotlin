@@ -25,8 +25,5 @@ class NetworkWithSearch : Network {
         Errors.error(NetworkException.ERROR_INVALID, "Invalid search!")
     }
 
-    @JsonIgnore
-    fun getNetworkOnly() = Network(this)
-
     fun getSearches() = searches
 }

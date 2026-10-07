@@ -4,6 +4,7 @@ import ants.common.NetworkException
 import ants.external.Id
 import ants.external.NetworkWithSearch
 import ants.external.Paths
+import ants.models.Network
 import ants.storage.NetworkStore
 import ants.storage.PathStore
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -38,19 +39,19 @@ open class NetworkService(
 
     @Transactional
     fun findPaths(data: NetworkWithSearch, store: Boolean): Paths {
-        val network = data.getNetwork()
+        val network = Network(data)
         val paths = data.getSearches().map { ants.external.Path(it, network) }
-        val id = data.getId()
+        val id = data.id()
         if (store) {
             storePaths(id, paths)
-            storeNetwork(data.getNetworkOnly())
+            storeNetwork(data)
         }
         return Paths(id, paths)
     }
 
     @Transactional
     fun storeNetwork(network: ants.external.Network): Id {
-        val id = network.getId()
+        val id = network.id()
         if (getNetworkById(id) == null) networkStore.save(ants.storage.Network(mapper, id, network))
         return Id(id)
     }

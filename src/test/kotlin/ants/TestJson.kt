@@ -10,9 +10,7 @@ import ants.storage.PathStore
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import org.springframework.data.repository.CrudRepository
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import java.lang.reflect.Proxy
 import java.util.UUID
 import kotlin.collections.ArrayList
@@ -97,7 +95,7 @@ class TestJson {
             assertEquals(1, paths.size)
             assertEquals(listOf(0, 1, 2), paths[0].getPath())
         }
-        val id = data.getId()
+        val id = data.id()
         assertEquals(1, stores.networkCount(id))
         assertEquals(1, stores.pathCount(id))
     }

@@ -9,16 +9,18 @@ import java.nio.charset.StandardCharsets
 import java.util.Base64
 
 open class Network : IRequest, ants.common.Network {
-    @JsonProperty internal var name: String
-    @JsonProperty internal var nodes: MutableList<Node>
-    @JsonProperty internal var connections: MutableList<Connection>
+    @JsonProperty var name: String
+    @JsonProperty var nodes: MutableList<Node>
+    @JsonProperty var connections: MutableList<Connection>
 
     constructor() : this("")
+
     constructor(name: String) {
         this.name = name
         nodes = mutableListOf()
         connections = mutableListOf()
     }
+
     constructor(network: ants.models.Network) {
         name = network.getName()
         nodes = network.getNodeData().toMutableList()
@@ -49,6 +51,7 @@ open class Network : IRequest, ants.common.Network {
     }
 
     override fun closeNode(id: Int) = setNodeState(id, true)
+
     override fun openMode(id: Int) = setNodeState(id, false)
 
     override fun getMode(id: Int): ants.common.Node =
@@ -66,7 +69,9 @@ open class Network : IRequest, ants.common.Network {
     }
 
     override fun connect(from: Int, to: Int) = connect(from, to, mapOf(Direction.A to 0, Direction.B to 0))
+
     override fun connect(from: Int, to: Int, cost: Int) = connect(from, to, mapOf(Direction.A to cost))
+
     override fun connect(from: Int, to: Int, costA: Int, costB: Int) =
         connect(from, to, mapOf(Direction.A to costA, Direction.B to costB))
 
@@ -82,24 +87,9 @@ open class Network : IRequest, ants.common.Network {
         Errors.cannotCreate(Connection::class.java)
     }
 
-    @JsonIgnore
-    fun getNetwork(): ants.models.Network {
-        val network = ants.models.Network(name)
-        nodes.forEach { network.addNode(it.id, it.closed) }
-        connections.forEach {
-            network.connect(
-                it.from, it.to,
-                if (it.direction == Direction.A) it.cost else -1,
-                if (it.direction == Direction.B) it.cost else -1
-            )
-        }
-        return network
-    }
-
     override fun equals(other: Any?) = other is Network && hashCode() == other.hashCode()
 
-    @JsonIgnore
-    fun getId(): String =
+    fun id(): String =
         Base64.getEncoder().encodeToString(hashCode().toString().toByteArray(StandardCharsets.UTF_8))
 
     override fun hashCode(): Int {
