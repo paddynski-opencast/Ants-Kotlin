@@ -5,22 +5,47 @@
 <bodu>
     <h1>Ants</h1>
     <hr>
-    <form action="/test" method="post">
-        <p>
-        <h3>Search</h3>
-        <p>
+    <p>
+    <a href="/">Reset</a>
+    <hr>
+    <p>Network</p>
+    <pre>{network}</pre>
+    <hr>
+    <form action="/add" method="post">
+        <Input type="text" value="{id}" style="display: none;" name="id">
+        <button>Add Node</button>
+    </form>
+    <hr>
+    <form action="/connect" method="post">
+        <Input type="text" value="{id}" style="display: none;" name="id">
         <table>
             <tr>
                 <td>From</td>
-                <td><Input type="number" value="0" min="0" max="4" name="from"></td>
+                <td><Input type="number" value="0" min="0" max="{max}" name="from"></td>
             </tr>
             <tr>
                 <td>To</td>
-                <td><Input type="number" value="0" min="0" max="4" name="to"></td>
+                <td><Input type="number" value="0" min="0" max="{max}" name="to"></td>
             </tr>
         </table>
         <p>
-        <button>Send</button>
+        <button>Connect</button>
+    </form>
+    <hr>
+    <form action="/test" method="post">
+        <Input type="text" value="{id}" style="display: none;" name="id">
+        <table>
+            <tr>
+                <td>From</td>
+                <td><Input type="number" value="0" min="0" max="{max}" name="from"></td>
+            </tr>
+            <tr>
+                <td>To</td>
+                <td><Input type="number" value="0" min="0" max="{max}" name="to"></td>
+            </tr>
+        </table>
+        <p>
+        <button>Search</button>
     </form>
 </bodu>
 </html>

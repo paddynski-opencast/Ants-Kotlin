@@ -21,10 +21,23 @@ open class NetworkController(
     companion object {
         const val FINDPATHS = "/findPaths"
         const val GETPATHS = "/getPaths"
+        const val GETNET = "/get"
         const val FINDPATH = "/findPath"
         const val STORE = "/store"
-        const val DEL = "/delete"
+        const val DEL = "/del"
         private val logger: Logger = LogManager.getLogger(NetworkController::class.java)
+    }
+
+    @RequestMapping(method = [GET], path = [GETNET])
+    fun get(@RequestParam id: String): ResponseEntity<IResponse> {
+        log(Id(id), false)
+        return try {
+            service.getNetworkById(id)
+                .also { log(it, true) }
+                .let { ResponseEntity.ok<IResponse>(it) }
+        } catch (e: NetworkException) {
+            error(e)
+        }
     }
 
     @RequestMapping(method = [GET], path = [GETPATHS])

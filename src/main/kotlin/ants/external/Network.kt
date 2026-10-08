@@ -3,12 +3,11 @@ package ants.external
 import ants.common.Direction
 import ants.common.Errors
 import ants.common.NetworkException
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.nio.charset.StandardCharsets
-import java.util.Base64
+import java.util.*
 
-open class Network : IRequest, ants.common.Network {
+open class Network : IRequest, IResponse, ants.common.Network {
     @JsonProperty var name: String
     @JsonProperty var nodes: MutableList<Node>
     @JsonProperty var connections: MutableList<Connection>

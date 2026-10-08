@@ -24,12 +24,12 @@ open class NetworkService(
         return Paths(id, data.map { it.getObject(mapper) })
     }
 
-    private fun getNetworkById(id: String): ants.external.Network? =
+    fun getNetworkById(id: String): ants.external.Network =
         networkStore.findAllForHash(id).firstOrNull()?.getObject(mapper)
+            ?: throw NetworkException("No data found!", HttpStatus.NOT_FOUND.value(), listOf(id))
 
     fun findPath(id: String, from: Int, to: Int): Paths {
         val data = getNetworkById(id)
-            ?: throw NetworkException("No data found!", HttpStatus.NOT_FOUND.value(), listOf(id))
         val network = NetworkWithSearch(data)
         network.addSearch(from, to)
         val paths = findPaths(network, false)
@@ -52,7 +52,7 @@ open class NetworkService(
     @Transactional
     fun storeNetwork(network: ants.external.Network): Id {
         val id = network.id()
-        if (getNetworkById(id) == null) networkStore.save(ants.storage.Network(mapper, id, network))
+        networkStore.save(ants.storage.Network(mapper, id, network))
         return Id(id)
     }
 
