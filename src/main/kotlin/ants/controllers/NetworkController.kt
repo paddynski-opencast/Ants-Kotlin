@@ -24,7 +24,7 @@ open class NetworkController(
         const val GETNET = "/get"
         const val FINDPATH = "/findPath"
         const val STORE = "/store"
-        const val DEL = "/del"
+        const val DEL = "/delete"
         private val logger: Logger = LogManager.getLogger(NetworkController::class.java)
     }
 

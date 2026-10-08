@@ -1,7 +1,6 @@
 package ants.controllers
 
 import ants.external.IResponse
-import ants.external.Id
 import ants.external.Network
 import ants.external.NetworkWithSearch
 import ants.service.NetworkService
@@ -57,10 +56,10 @@ open class PageController(
     @RequestMapping(method = [RequestMethod.POST], path = ["/connect"])
     fun connect(@RequestParam id: String, @RequestParam from: String, @RequestParam to: String): String? {
         return try {
-            val nodes = listOf(from.toInt(), to.toInt())
             val network = service.getNetworkById(id)
             service.delete(id)
-            network.connect(nodes.min(), nodes.max())
+            network.connect(from.toInt(), to.toInt())
+            network.connect(to.toInt(), from.toInt())
             show(service.storeNetwork(network).id)
         } catch (e: Exception) {
             e.message

@@ -48,11 +48,10 @@ internal class Ant : Thread {
                 next = first.node
                 if (pathNodes.contains(next)) {
                     next = null
-                } else {
-                    pathNodes.addNode(next)
-                    if (next !== destination) {
-                        connections.filter(Connection::isValid).forEach { Ant(this, it) }
-                    }
+                }
+                pathNodes.addNode(first.node)
+                if (next !== destination) {
+                    connections.forEach { Ant(this, it) }
                 }
                 cost += first.cost
             }
@@ -61,5 +60,4 @@ internal class Ant : Thread {
     }
 
     val nodes: List<Node> get() = pathNodes.nodes
-    val networkRef: Network get() = network
 }

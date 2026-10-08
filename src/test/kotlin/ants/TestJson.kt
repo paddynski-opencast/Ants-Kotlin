@@ -48,6 +48,7 @@ private class FakeStores {
     } as NetworkStore
 
     fun pathCount(hash: String) = paths.count { it.getHash() == hash }
+
     fun networkCount(hash: String) = networks.count { it.getHash() == hash }
 
     private fun defaultValue(type: Class<*>) = when {
@@ -76,11 +77,11 @@ class TestJson {
         val expected = ants.external.Network("")
         expected.addNode(0); expected.addNode(1); expected.addNode(2); expected.addNode(3); expected.addNode(4); expected.addNode(10)
         expected.connect(0, 1); expected.connect(1, 2); expected.connect(1, 3); expected.connect(4, 1)
-        assertEquals(expected, ants.external.Network(network()))
+        assertEquals(expected, Network(network()))
     }
 
     @Test fun testJson() {
-        val expected = ants.external.Network(network())
+        val expected = Network(network())
         val json = mapper.writeValueAsString(expected)
         assertEquals(expected, mapper.readValue(json, ants.external.Network::class.java))
     }
@@ -127,7 +128,7 @@ class TestJson {
     }
 
     @Test fun testControllerFindPath() {
-        val response = controller.store(ants.external.Network(network()))
+        val response = controller.store(Network(network()))
         assertEquals(200, response.statusCode.value())
         val id = (response.body as Id).id
         val pathResponse = controller.findPath(id, 0, 2)

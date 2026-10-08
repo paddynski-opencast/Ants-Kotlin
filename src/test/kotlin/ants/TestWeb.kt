@@ -51,13 +51,10 @@ class TestWeb {
     }
 
     @Test fun testGet() {
-        val expected = javaClass.getResourceAsStream("/response.json")!!.readAllBytes().toString(Charsets.UTF_8)
+        val expected = withoutWhitespace(javaClass.getResourceAsStream("/response.json")!!.readAllBytes().toString(Charsets.UTF_8))
+        val id = expected.substring(7, expected.indexOf("\"", 7))
+        restTemplate.delete("http://localhost:$port/delete?id=$id")
         post(true, true)
-        assertEquals(withoutWhitespace(expected), withoutWhitespace(get("MzE1NTQyMzI0")!!))
-    }
-
-    @Test fun testDelete() {
-        post(true, true)
-        restTemplate.delete("http://localhost:$port/delete?id=MjMwNDQ0OTk=")
+        assertEquals(expected, get(id)!!)
     }
 }

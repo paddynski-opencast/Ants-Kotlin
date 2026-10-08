@@ -25,14 +25,33 @@ class TestComplexNetwork {
         val path = network.findPath(0, 2).get()
         assertEquals(listOf(l1, l2, l3), path.getNodes()); assertEquals(1, path.getCost())
     }
+
     @Test fun testPath2to0() {
         setup()
         val path = network.findPath(2, 0).get()
         assertEquals(listOf(l3, l5, l1), path.getNodes()); assertEquals(1, path.getCost())
     }
+
     @Test fun testPath2to0with4Closed() {
         setup(); network.closeNode(4)
         val path = network.findPath(2, 0).get()
         assertEquals(listOf(l3, l4, l1), path.getNodes()); assertEquals(2, path.getCost())
+    }
+
+    @Test fun testConnectedNetwork() {
+        val network = Network("Test")
+
+        val n1 = network.addNode(0)
+        val n2 = network.addNode(1)
+        val n3 = network.addNode(2)
+
+        network.connect(0, 1)
+        network.connect(1, 0)
+
+        network.connect(0, 2)
+        network.connect(2, 0)
+
+        val path = network.findPath(1, 2)
+        assertEquals(listOf(n2, n1, n3), path.get().getNodes())
     }
 }

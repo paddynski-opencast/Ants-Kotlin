@@ -9,7 +9,10 @@ class Node internal constructor(
     private val connections = linkedSetOf<Connection>()
 
     internal fun getConnections(direction: Direction) =
-        connections.filter { it.isFor(direction) }.toMutableList()
+        connections
+            .filter { it.isFor(direction) }
+            .filter { it.isValid() }
+            .toMutableList()
 
     internal fun connect(direction: Direction, node: Node, cost: Int) {
         if (cost >= 0) connections.add(Connection(direction, node, cost))
