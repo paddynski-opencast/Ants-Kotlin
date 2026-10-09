@@ -7,8 +7,6 @@ import ants.external.Connection
 import java.util.Optional
 
 class Network : ants.common.Network {
-    companion object { const val INVALID = -1 }
-
     private val name: String
     private var ants = 0
     private val nodes = mutableListOf<Node>()

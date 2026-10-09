@@ -10,6 +10,7 @@ abstract class Entity<T> {
     private var json: String? = null
 
     protected constructor()
+
     constructor(mapper: ObjectMapper, hash: String, data: T) {
         this.hash = hash
         json = try { mapper.writeValueAsString(data) } catch (e: Exception) { throw RuntimeException(e) }

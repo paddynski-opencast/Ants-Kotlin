@@ -10,8 +10,9 @@ class NetworkWithSearch : Network {
     val searches = mutableListOf<Search>()
 
     constructor() : super()
-    constructor(name: String) : super(name)
+
     constructor(network: ants.models.Network) : super(network)
+
     constructor(network: Network) : super(network.name) {
         nodes = network.nodes
         connections = network.connections

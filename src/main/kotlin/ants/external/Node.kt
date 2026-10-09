@@ -12,7 +12,8 @@ class Node() : ants.common.Node() {
     }
 
     override fun equals(other: Any?) = other is Node && id == other.id
+
     override fun hashCode() = id
-    fun hash() = "%d-%d".format(id, if (closed) 1 else 0)
-    fun isClosed() = closed
+
+    fun hash() = "$id-${if (closed) 1 else 0}"
 }

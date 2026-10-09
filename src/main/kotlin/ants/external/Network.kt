@@ -33,7 +33,7 @@ open class Network : IRequest, IResponse, ants.common.Network {
     }
 
     private fun invalidCosts(costs: Collection<Int>) {
-        if (costs.any { it < ants.models.Network.INVALID }) Errors.error(NetworkException.ERROR_CONNECT, "Invalid cost(s)!")
+        if (costs.any { it < INVALID }) Errors.error(NetworkException.ERROR_CONNECT, "Invalid cost(s)!")
     }
 
     protected fun nodeExists(id: Int): Boolean {
@@ -83,9 +83,9 @@ open class Network : IRequest, IResponse, ants.common.Network {
     private fun connect(from: Int, to: Int, costs: Map<Direction, Int>) {
         if (to != from && nodeExists(from) && nodeExists(to)) {
             invalidCosts(costs.values)
-            costs[Direction.A]?.takeIf { it > ants.models.Network.INVALID }
+            costs[Direction.A]?.takeIf { it > INVALID }
                 ?.let { connections.add(Connection(from, to, Direction.A, it)) }
-            costs[Direction.B]?.takeIf { it > ants.models.Network.INVALID }
+            costs[Direction.B]?.takeIf { it > INVALID }
                 ?.let { connections.add(Connection(to, from, Direction.B, it)) }
             return
         }
@@ -99,8 +99,8 @@ open class Network : IRequest, IResponse, ants.common.Network {
 
     override fun hashCode(): Int {
         val hashes = mutableListOf(name)
-        hashes += nodes.map(Node::hash).sorted()
-        hashes += connections.map(Connection::hash).sorted()
+        hashes += nodes.map { it.hash() }.sorted()
+        hashes += connections.map { it.hash() }.sorted()
         return hashes.hashCode()
     }
 

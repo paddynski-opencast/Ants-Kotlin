@@ -15,6 +15,8 @@ class Connection() : ants.common.Connection {
 
     override fun equals(other: Any?) =
         other is Connection && from == other.from && to == other.to && direction == other.direction && cost == other.cost
+
     override fun hashCode() = java.util.Objects.hash(from, to, direction, cost)
-    fun hash() = "%d-%d-%s-%d".format(from, to, if (direction == Direction.A) "A" else "B", cost)
+
+    fun hash() = "$from-$to-${if (direction == Direction.A) "A" else "B"}-$cost"
 }
