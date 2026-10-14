@@ -5,13 +5,11 @@ import ants.external.Network
 import ants.external.NetworkWithSearch
 import ants.service.NetworkService
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RequestParam
+import io.swagger.v3.oas.annotations.Hidden
+import org.springframework.web.bind.annotation.*
 
-@Controller
+@Hidden
+@RestController
 open class PageController(
   private val mapper: ObjectMapper,
   private val controller: NetworkController,
@@ -26,7 +24,7 @@ open class PageController(
       val id = service.storeNetwork(network)
       show(id.id)
     } catch (e: Exception) {
-      e.message
+      error("", e)
     }
   }
 
@@ -43,7 +41,7 @@ open class PageController(
         )
       )
     } catch (e: Exception) {
-      e.message
+      error(id, e)
     }
   }
 
@@ -55,7 +53,7 @@ open class PageController(
       network.addNode(network.nodes.size)
       show(service.storeNetwork(network).id)
     } catch (e: Exception) {
-      e.message
+      error(id, e)
     }
   }
 
@@ -63,12 +61,12 @@ open class PageController(
   fun connect(@RequestParam id: String, @RequestParam from: String, @RequestParam to: String): String? {
     return try {
       val network = service.getNetworkById(id)
-      service.delete(id)
       network.connect(from.toInt(), to.toInt())
       network.connect(to.toInt(), from.toInt())
+      service.delete(id)
       show(service.storeNetwork(network).id)
     } catch (e: Exception) {
-      e.message
+      error(id, e)
     }
   }
 
@@ -86,7 +84,15 @@ open class PageController(
         )
       )
     } catch (e: Exception) {
-      e.message
+      error(id, e)
     }
   }
+
+  private fun error(id: String, e: Exception): String? =
+    getContents(
+      "/error.html", mapOf(
+        "id" to id,
+        "error" to e.message.orEmpty()
+      )
+    )
 }
