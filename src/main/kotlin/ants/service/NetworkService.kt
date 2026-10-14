@@ -14,69 +14,69 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 open class NetworkService(
-    private val mapper: ObjectMapper,
-    private val pathStore: PathStore,
-    private val networkStore: NetworkStore
+  private val mapper: ObjectMapper,
+  private val pathStore: PathStore,
+  private val networkStore: NetworkStore
 ) {
-    fun getPaths(id: String): Paths {
-        val data = pathStore.findAllForHash(id)
-        if (data.isEmpty()) throw NetworkException("No data found!", HttpStatus.NOT_FOUND.value(), listOf(id))
-        return Paths(id, data.map { it.getObject(mapper) })
+  fun getPaths(id: String): Paths {
+    val data = pathStore.findAllForHash(id)
+    if (data.isEmpty()) throw NetworkException("No data found!", HttpStatus.NOT_FOUND.value(), listOf(id))
+    return Paths(id, data.map { it.getObject(mapper) })
+  }
+
+  private fun getN(id: String): ants.external.Network? =
+    networkStore.findAllForHash(id).firstOrNull()?.getObject(mapper)
+
+  fun getNetworkById(id: String): ants.external.Network =
+    getN(id) ?: throw NetworkException("No data found!", HttpStatus.NOT_FOUND.value(), listOf(id))
+
+  fun findPath(id: String, from: Int, to: Int): Paths {
+    val data = getNetworkById(id)
+    val network = NetworkWithSearch(data)
+    network.addSearch(from, to)
+    val paths = findPaths(network, false)
+    storePaths(id, paths.paths)
+    return paths
+  }
+
+  @Transactional
+  fun findPaths(data: NetworkWithSearch, store: Boolean): Paths {
+    val network = Network(data)
+    val paths = data.searches.map { ants.external.Path(it, network) }
+    val id = data.id()
+    if (store) {
+      storePaths(id, paths)
+      storeNetwork(data)
     }
+    return Paths(id, paths)
+  }
 
-    private fun getN(id: String): ants.external.Network? =
-        networkStore.findAllForHash(id).firstOrNull()?.getObject(mapper)
-
-    fun getNetworkById(id: String): ants.external.Network =
-        getN(id) ?: throw NetworkException("No data found!", HttpStatus.NOT_FOUND.value(), listOf(id))
-
-    fun findPath(id: String, from: Int, to: Int): Paths {
-        val data = getNetworkById(id)
-        val network = NetworkWithSearch(data)
-        network.addSearch(from, to)
-        val paths = findPaths(network, false)
-        storePaths(id, paths.paths)
-        return paths
+  @Transactional
+  fun storeNetwork(network: ants.external.Network): Id {
+    val id = network.id()
+    if (getN(id) == null) {
+      networkStore.save(ants.storage.Network(mapper, id, network))
     }
+    return Id(id)
+  }
 
-    @Transactional
-    fun findPaths(data: NetworkWithSearch, store: Boolean): Paths {
-        val network = Network(data)
-        val paths = data.searches.map { ants.external.Path(it, network) }
-        val id = data.id()
-        if (store) {
-            storePaths(id, paths)
-            storeNetwork(data)
-        }
-        return Paths(id, paths)
-    }
+  @Transactional
+  private fun storePaths(id: String, paths: List<ants.external.Path>) {
+    val existing = pathStore.findAllForHash(id).map { it.getObject(mapper) }
+    paths.filter { path -> existing.none { it.isSameAs(path) } }
+      .forEach { p -> pathStore.save(ants.storage.Path(mapper, id, p)) }
+  }
 
-    @Transactional
-    fun storeNetwork(network: ants.external.Network): Id {
-        val id = network.id()
-        if (getN(id) == null) {
-            networkStore.save(ants.storage.Network(mapper, id, network))
-        }
-        return Id(id)
+  @Transactional
+  fun delete(id: String): Boolean {
+    val networks = networkStore.findAllForHash(id)
+    if (networks.isEmpty()) return false
+    networks.forEach { network ->
+      network.getId()?.let { networkStore.deleteById(it) }
+      pathStore.findAllForHash(network.getHash() ?: "")
+        .mapNotNull { it.getId() }
+        .let { pathStore.deleteAllById(it) }
     }
-
-    @Transactional
-    private fun storePaths(id: String, paths: List<ants.external.Path>) {
-        val existing = pathStore.findAllForHash(id).map { it.getObject(mapper) }
-        paths.filter { path -> existing.none { it.isSameAs(path) } }
-            .forEach { p -> pathStore.save(ants.storage.Path(mapper, id, p)) }
-    }
-
-    @Transactional
-    fun delete(id: String): Boolean {
-        val networks = networkStore.findAllForHash(id)
-        if (networks.isEmpty()) return false
-        networks.forEach { network ->
-            network.getId()?.let { networkStore.deleteById(it) }
-            pathStore.findAllForHash(network.getHash() ?: "")
-                .mapNotNull { it.getId() }
-                .let { pathStore.deleteAllById(it) }
-        }
-        return true
-    }
+    return true
+  }
 }

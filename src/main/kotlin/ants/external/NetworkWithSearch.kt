@@ -2,27 +2,26 @@ package ants.external
 
 import ants.common.Errors
 import ants.common.NetworkException
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 
 class NetworkWithSearch : Network {
-    @JsonProperty
-    val searches = mutableListOf<Search>()
+  @JsonProperty
+  val searches = mutableListOf<Search>()
 
-    constructor() : super()
+  constructor() : super()
 
-    constructor(network: ants.models.Network) : super(network)
+  constructor(network: ants.models.Network) : super(network)
 
-    constructor(network: Network) : super(network.name) {
-        nodes = network.nodes
-        connections = network.connections
+  constructor(network: Network) : super(network.name) {
+    nodes = network.nodes
+    connections = network.connections
+  }
+
+  fun addSearch(from: Int, to: Int) {
+    if (nodeExists(from) && nodeExists(to)) {
+      searches.add(Search(from, to))
+      return
     }
-
-    fun addSearch(from: Int, to: Int) {
-        if (nodeExists(from) && nodeExists(to)) {
-            searches.add(Search(from, to))
-            return
-        }
-        Errors.error(NetworkException.ERROR_INVALID, "Invalid search!")
-    }
+    Errors.error(NetworkException.ERROR_INVALID, "Invalid search!")
+  }
 }

@@ -11,8 +11,10 @@ import java.util.*
 open class Network : IRequest, IResponse, ants.common.Network {
   @JsonProperty
   var name: String
+
   @JsonProperty
   var nodes: MutableList<Node>
+
   @JsonProperty
   var connections: MutableList<Connection>
 

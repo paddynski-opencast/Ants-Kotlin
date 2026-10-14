@@ -3,8 +3,10 @@ package ants.external
 import com.fasterxml.jackson.annotation.JsonProperty
 
 open class Id() : IRequest, IResponse {
-    @JsonProperty
-    var id: String = ""
+  @JsonProperty
+  var id: String = ""
 
-    constructor(id: String) : this() { this.id = id }
+  constructor(id: String) : this() {
+    this.id = id
+  }
 }
