@@ -5,9 +5,10 @@ import ants.external.Network
 import ants.external.NetworkWithSearch
 import ants.service.NetworkService
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 
-@RestController
+@Controller
 open class PageController(
     private val mapper: ObjectMapper,
     private val controller: NetworkController,

@@ -1,9 +1,11 @@
 package ants
 
 import ants.models.Network
+import ants.models.Path
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import java.util.Optional
 
 class TestSimpleNetwork {
     @Test fun testPath() {
@@ -26,9 +28,19 @@ class TestSimpleNetwork {
         val l1 = network.addNode(0)
         val l2 = network.addNode(1, true)
         val l3 = network.addNode(2)
+
         network.connect(0, 1); network.connect(1, 2)
         assertTrue(network.findPath(0, 2).isEmpty)
+
         network.openMode(1)
         assertEquals(listOf(l1, l2, l3), network.findPath(0, 2).get().getNodes())
+
+        network.closeNode(0)
+        network.openMode(2)
+        assertEquals(Optional.empty<Path>(), network.findPath(0, 2))
+
+        network.openMode(0)
+        network.closeNode(2)
+        assertEquals(Optional.empty<Path>(), network.findPath(0, 2))
     }
 }

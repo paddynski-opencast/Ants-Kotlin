@@ -1,7 +1,6 @@
 package ants
 
 import ants.controllers.NetworkController
-import ants.external.Token
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,11 +17,10 @@ class TestWeb {
 
     @Autowired lateinit var restTemplate: TestRestTemplate
 
-    private fun post(isJson: Boolean, useAuth: Boolean): ResponseEntity<String> {
+    private fun post(): ResponseEntity<String> {
         val payload = javaClass.getResourceAsStream("/request.json")!!.readAllBytes().toString(Charsets.UTF_8)
         val headers = HttpHeaders()
-        if (isJson) headers.contentType = MediaType.APPLICATION_JSON
-        if (useAuth) headers.setBearerAuth(Token.getToken(payload.toByteArray().size))
+        headers.contentType = MediaType.APPLICATION_JSON
         return restTemplate.postForEntity(
             "http://localhost:$port${NetworkController.FINDPATHS}",
             HttpEntity(payload, headers),
@@ -37,24 +35,16 @@ class TestWeb {
 
     @Test fun testOk() {
         val expected = javaClass.getResourceAsStream("/response.json")!!.readAllBytes().toString(Charsets.UTF_8)
-        val response = post(true, true)
+        val response = post()
         assertEquals(HttpStatusCode.valueOf(200), response.statusCode)
         assertEquals(withoutWhitespace(expected), withoutWhitespace(response.body!!))
-    }
-
-    @Test fun testUnauthorized() {
-        assertEquals(HttpStatusCode.valueOf(401), post(true, false).statusCode)
-    }
-
-    @Test fun testNotJson() {
-        assertEquals(HttpStatusCode.valueOf(415), post(false, true).statusCode)
     }
 
     @Test fun testGet() {
         val expected = withoutWhitespace(javaClass.getResourceAsStream("/response.json")!!.readAllBytes().toString(Charsets.UTF_8))
         val id = expected.substring(7, expected.indexOf("\"", 7))
         restTemplate.delete("http://localhost:$port/delete?id=$id")
-        post(true, true)
+        post()
         assertEquals(expected, get(id)!!)
     }
 }

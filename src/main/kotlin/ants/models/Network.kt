@@ -85,12 +85,13 @@ class Network : ants.common.Network {
             costs[Direction.B]?.takeIf { it > INVALID }?.let { toNode.connect(Direction.B, fromNode, it) }
             return
         }
-        Errors.error(NetworkException.ERROR_CONNECT, "Connect connect node to itself! - [$from]", from)
+        Errors.error(NetworkException.ERROR_CONNECT, "Cannot connect connect node to itself! - [$from]", from)
     }
 
     fun findPath(from: Int, to: Int): Optional<Path> {
         val fromNode = getMode(from)
         val toNode = getMode(to)
+        if (fromNode.isClosed() || toNode.isClosed()) return Optional.empty()
         if (fromNode === toNode) return Optional.of(Path(fromNode))
         if (ants != 0) return Network(this).findPath(from, to)
         paths.clear()
