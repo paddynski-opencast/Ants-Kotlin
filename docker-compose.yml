@@ -1,0 +1,7 @@
+services:
+    mongodb:
+        image: mongodb/mongodb-community-server:latest
+        container_name: mongodb
+        restart: unless-stopped
+        ports:
+            - "27017:27017"

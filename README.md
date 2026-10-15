@@ -10,7 +10,11 @@ There is a simple user interface at http://localhost:8080/ which you can access 
 The API relies on MongoDB running on the default port.
 Please make sure you have this on your system before running the app.
 
+```bash
+docker compose up -d
+```
+
 ### How to test
 
-To test the endpoints, run the application and go to http://localhost:8080/swagger-ui/index.html#/.
+To test the endpoints, run the application and go to http://localhost:8080/swagger-ui/index.html
 You may also use the simple interface mentioned above.
