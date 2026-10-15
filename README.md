@@ -12,5 +12,5 @@ Please make sure you have this on your system before running the app.
 
 ### How to test
 
-To test the endpoints, run rhw application and go to http://localhost:8080/swagger-ui/index.html#/.
+To test the endpoints, run the application and go to http://localhost:8080/swagger-ui/index.html#/.
 You may also use the simple interface mentioned above.
