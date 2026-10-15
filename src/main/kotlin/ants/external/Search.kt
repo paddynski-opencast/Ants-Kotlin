@@ -1,5 +1,7 @@
 package ants.external
 
+import ants.common.NetworkException
+import ants.common.NetworkException.Companion.ERROR_INVALID
 import com.fasterxml.jackson.annotation.JsonProperty
 
 open class Search() {
@@ -17,4 +19,11 @@ open class Search() {
   fun getFrom() = from
 
   fun getTo() = to
+
+  fun validate(ids: List<Int>) {
+    val invalidIds = listOf(from, to).filter { !ids.contains(it) }
+    if (invalidIds.isNotEmpty()) {
+      throw NetworkException("Invalid Search!", ERROR_INVALID, invalidIds.map { it.toString() })
+    }
+  }
 }

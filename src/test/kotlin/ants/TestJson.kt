@@ -113,7 +113,7 @@ class TestJson {
     val response = controller.findPaths(data)
     assertEquals(400, response.statusCode.value())
     val error = response.body as Error
-    assertEquals(NetworkException.ERROR_ABSENT, error.code)
+    assertEquals(NetworkException.ERROR_INVALID, error.code)
     assertEquals(listOf("12"), error.ids)
   }
 

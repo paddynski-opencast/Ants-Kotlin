@@ -116,20 +116,34 @@ open class Network : IRequest, IResponse, ants.common.Network {
     connections = src.connections
   }
 
-  fun validate() {
-    val invalidIds = nodes.map { it.id }.associate { id ->
-      id to nodes.filter { it.id == id }
-    }.filter { (_, list) -> list.size > 1 }
-      .keys.toList()
-    if (invalidIds.isEmpty()) {
-      val invalid = connections.any {
-        it.from == it.to
+  open fun validate() {
+    if (nodes.isEmpty() || connections.isEmpty()) {
+      val error = when {
+        nodes.isEmpty() -> "No nodes"
+        else -> "No connections"
       }
-      if (invalid) {
-        throw NetworkException("Invalid connection!", ERROR_INVALID, listOf())
-      }
+      throw NetworkException("$error!", ERROR_INVALID, listOf())
     } else {
-      throw NetworkException("Duplicate Nodes!", ERROR_INVALID, invalidIds.map { it.toString() })
+      val ids = nodes.map { it.id }
+      val negativeIds = ids.filter { it < 0 }
+      if (negativeIds.isEmpty()) {
+        val duplicateIds = ids.associate { id ->
+          id to nodes.filter { it.id == id }
+        }.filter { (_, list) -> list.size > 1 }
+          .keys.toList()
+        if (duplicateIds.isEmpty()) {
+          val invalid = connections.any {
+            it.from == it.to || !ids.contains(it.from) || !ids.contains(it.to) || it.cost < 0
+          }
+          if (invalid) {
+            throw NetworkException("Invalid connection!", ERROR_INVALID, listOf())
+          }
+        } else {
+          throw NetworkException("Duplicate Nodes!", ERROR_INVALID, duplicateIds.map { it.toString() })
+        }
+      } else {
+        throw NetworkException("Invalid Nodes!", ERROR_INVALID, negativeIds.map { it.toString() })
+      }
     }
   }
 }

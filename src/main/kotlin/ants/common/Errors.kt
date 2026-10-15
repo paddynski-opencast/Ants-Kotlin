@@ -5,8 +5,6 @@ object Errors {
   private const val ERROR_DOES_NOT_EXIST = "%s does not exist! - [%d]"
   private const val ERROR_CANNOT_CREATE = "Cannot create %s!"
 
-  fun invalidState() = error(NetworkException.ERROR_INVALID, "Invalid state!")
-
   fun error(code: Int, message: String) = error(message, code, emptyList())
 
   fun error(code: Int, message: String, id: Int) = error(message, code, listOf(id))

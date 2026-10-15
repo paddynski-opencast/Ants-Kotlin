@@ -2,6 +2,7 @@ package ants.external
 
 import ants.common.Errors
 import ants.common.NetworkException
+import ants.common.NetworkException.Companion.ERROR_INVALID
 import com.fasterxml.jackson.annotation.JsonProperty
 
 class NetworkWithSearch : Network {
@@ -23,5 +24,14 @@ class NetworkWithSearch : Network {
       return
     }
     Errors.error(NetworkException.ERROR_INVALID, "Invalid search!")
+  }
+
+  override fun validate() {
+    super.validate()
+    if (searches.isEmpty()) {
+      throw NetworkException("Invalid Searches!", ERROR_INVALID, listOf())
+    }
+    val ids = nodes.map { it.id }
+    searches.forEach { it.validate(ids) }
   }
 }
