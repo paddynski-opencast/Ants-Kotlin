@@ -6,6 +6,7 @@ class Node() : ants.common.Node() {
   @JsonProperty
   @JvmField
   var id: Int = 0
+
   @JsonProperty
   var closed: Boolean = false
 

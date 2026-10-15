@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 @SpringBootApplication
 @EnableMongoRepositories
-open class Main {
+class Main {
   companion object {
     @JvmStatic
     fun main(args: Array<String>) {

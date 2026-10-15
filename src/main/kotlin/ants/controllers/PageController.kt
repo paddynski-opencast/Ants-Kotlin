@@ -6,11 +6,15 @@ import ants.external.NetworkWithSearch
 import ants.service.NetworkService
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.swagger.v3.oas.annotations.Hidden
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
 
 @Hidden
 @RestController
-open class PageController(
+class PageController(
   private val mapper: ObjectMapper,
   private val controller: NetworkController,
   private val service: NetworkService
@@ -75,7 +79,7 @@ open class PageController(
     return try {
       val request = NetworkWithSearch(service.getNetworkById(id))
       request.addSearch(from.toInt(), to.toInt())
-      val response: IResponse? = controller.findPaths(request, false).body
+      val response: IResponse? = controller.findPaths(request).body
       getContents(
         "/test.html", mapOf(
           "id" to id,

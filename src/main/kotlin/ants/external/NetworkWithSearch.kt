@@ -23,7 +23,7 @@ class NetworkWithSearch : Network {
       searches.add(Search(from, to))
       return
     }
-    Errors.error(NetworkException.ERROR_INVALID, "Invalid search!")
+    Errors.error(ERROR_INVALID, "Invalid search!")
   }
 
   override fun validate() {

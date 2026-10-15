@@ -6,10 +6,13 @@ import com.fasterxml.jackson.annotation.JsonProperty
 class Connection() : ants.common.Connection {
   @JsonProperty
   var from: Int = 0
+
   @JsonProperty
   var to: Int = 0
+
   @JsonProperty
   var direction: Direction = Direction.A
+
   @JsonProperty
   var cost: Int = 0
 

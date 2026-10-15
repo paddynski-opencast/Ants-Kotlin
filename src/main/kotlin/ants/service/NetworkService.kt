@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-open class NetworkService(
+class NetworkService(
   private val mapper: ObjectMapper,
   private val pathStore: PathStore,
   private val networkStore: NetworkStore
@@ -30,24 +30,22 @@ open class NetworkService(
   fun getNetworkById(id: String): ants.external.Network =
     getN(id) ?: throw NetworkException("No data found!", HttpStatus.NOT_FOUND.value(), listOf(id))
 
-  fun findPath(id: String, from: Int, to: Int): Paths {
+  @Transactional
+  fun findPathsById(id: String, from: Int, to: Int): Paths {
     val data = getNetworkById(id)
     val network = NetworkWithSearch(data)
     network.addSearch(from, to)
-    val paths = findPaths(network, false)
-    storePaths(id, paths.paths)
+    val paths = findPathsInData(network)
     return paths
   }
 
   @Transactional
-  fun findPaths(data: NetworkWithSearch, store: Boolean): Paths {
+  fun findPathsInData(data: NetworkWithSearch): Paths {
     val network = Network(data)
     val paths = data.searches.map { ants.external.Path(it, network) }
     val id = data.id()
-    if (store) {
-      storePaths(id, paths)
-      storeNetwork(data)
-    }
+    storePaths(id, paths)
+    storeNetwork(data)
     return Paths(id, paths)
   }
 
@@ -61,7 +59,7 @@ open class NetworkService(
   }
 
   @Transactional
-  private fun storePaths(id: String, paths: List<ants.external.Path>) {
+  fun storePaths(id: String, paths: List<ants.external.Path>) {
     val existing = pathStore.findAllForHash(id).map { it.getObject(mapper) }
     paths.filter { path -> existing.none { it.isSameAs(path) } }
       .forEach { p -> pathStore.save(ants.storage.Path(mapper, id, p)) }

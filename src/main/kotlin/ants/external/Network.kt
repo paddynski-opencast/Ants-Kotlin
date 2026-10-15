@@ -44,7 +44,7 @@ open class Network : IRequest, IResponse, ants.common.Network {
 
   protected fun nodeExists(id: Int): Boolean {
     if (id < 0) {
-      Errors.error(NetworkException.ERROR_INVALID, "Invalid 'id'!")
+      Errors.error(ERROR_INVALID, "Invalid 'id'!")
       return true
     }
     return nodes.any { it.id == id }

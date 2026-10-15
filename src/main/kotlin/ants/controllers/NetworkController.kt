@@ -1,7 +1,12 @@
 package ants.controllers
 
 import ants.common.NetworkException
-import ants.external.*
+import ants.external.IResponse
+import ants.external.Id
+import ants.external.IdWithSearch
+import ants.external.Network
+import ants.external.NetworkWithSearch
+import ants.external.Status
 import ants.service.NetworkService
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -20,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-open class NetworkController(
+class NetworkController(
   private val service: NetworkService,
   private val mapper: ObjectMapper
 ) {
@@ -52,18 +57,6 @@ open class NetworkController(
     log(Id(id), false)
     return try {
       service.getPaths(id)
-        .also { log(it, true) }
-        .let { ResponseEntity.ok<IResponse>(it) }
-    } catch (e: NetworkException) {
-      error(e)
-    }
-  }
-
-  fun findPaths(data: NetworkWithSearch, store: Boolean): ResponseEntity<IResponse> {
-    log(data, false)
-    return try {
-      data.validate()
-      service.findPaths(data, store)
         .also { log(it, true) }
         .let { ResponseEntity.ok<IResponse>(it) }
     } catch (e: NetworkException) {
@@ -116,7 +109,15 @@ open class NetworkController(
     )
   )
   fun findPaths(@org.springframework.web.bind.annotation.RequestBody @Valid data: NetworkWithSearch): ResponseEntity<IResponse> {
-    return findPaths(data, true)
+    log(data, false)
+    return try {
+      data.validate()
+      service.findPathsInData(data)
+        .also { log(it, true) }
+        .let { ResponseEntity.ok<IResponse>(it) }
+    } catch (e: NetworkException) {
+      error(e)
+    }
   }
 
   @RequestMapping(method = [POST], path = [STORE])
@@ -173,7 +174,7 @@ open class NetworkController(
   fun findPath(@RequestParam id: String, @RequestParam from: Int, @RequestParam to: Int): ResponseEntity<IResponse> {
     log(IdWithSearch(id, from, to), false)
     return try {
-      service.findPath(id, from, to)
+      service.findPathsById(id, from, to)
         .also { log(it, true) }
         .let { ResponseEntity.ok<IResponse>(it) }
     } catch (e: NetworkException) {

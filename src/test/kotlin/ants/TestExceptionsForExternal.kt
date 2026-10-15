@@ -6,6 +6,7 @@ import org.junit.jupiter.api.assertThrows
 
 class TestExceptionsForExternal {
   private fun network() = ants.external.Network()
+
   @Test
   fun testNoInvalidNodes() {
     assertThrows<NetworkException> { network().getMode(0) }
