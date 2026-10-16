@@ -1,5 +1,6 @@
 package ants
 
+import ants.common.Direction
 import ants.models.Network
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -55,12 +56,10 @@ class TestComplexNetwork {
     val n3 = network.addNode(2)
 
     network.connect(0, 1)
-    network.connect(1, 0)
-
-    network.connect(0, 2)
     network.connect(2, 0)
 
     val path = network.findPath(1, 2)
     assertEquals(listOf(n2, n1, n3), path.get().getNodes())
+    assertEquals(Direction.B, path.get().getDirection())
   }
 }

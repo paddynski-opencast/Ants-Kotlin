@@ -15,9 +15,18 @@ class Path internal constructor(
     return direction?.let { "[$it -> $nodeText]" } ?: nodeText
   }
 
-  fun getStart() = nodeList.first().id
-  fun getEnd() = nodeList.last().id
-  fun getDirection() = direction
-  fun getNodes() = nodeList
-  fun getCost() = pathCost
+  fun getStart() =
+    nodeList.first().id
+
+  fun getEnd() =
+    nodeList.last().id
+
+  fun getDirection() =
+    direction
+
+  fun getNodes() =
+    nodeList
+
+  fun getCost() =
+    pathCost
 }

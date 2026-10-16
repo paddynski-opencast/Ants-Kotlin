@@ -99,7 +99,10 @@ open class Network : IRequest, IResponse, ants.common.Network {
   }
 
   private fun addConnection(connection: Connection) {
-    if (countConnections(connection.from, connection.to, connection.direction) == 0) {
+    val from = connection.from
+    val to = connection.to
+    val direction = connection.direction
+    if (countConnections(from, to, direction) == 0 && countConnections(to, from, direction) == 0) {
       connections.add(connection)
       return
     }
@@ -146,6 +149,10 @@ open class Network : IRequest, IResponse, ants.common.Network {
           if (!invalid) {
             val counts = connections.map { countConnections(it.from, it.to, it.direction) }
             invalid = counts.any { it > 1 }
+          }
+          if (!invalid) {
+            val counts = connections.map { countConnections(it.to, it.from, it.direction) }
+            invalid = counts.any { it > 0 }
           }
           if (invalid) {
             throw NetworkException("Invalid connection!", ERROR_INVALID, listOf())
