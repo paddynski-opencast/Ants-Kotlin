@@ -10,6 +10,8 @@ There is a simple user interface at http://localhost:8080/ which you can access 
 The API relies on MongoDB running on the default port.
 Please make sure you have this on your system before running the app.
 
+If you have Docker on your system, you can run the following:
+
 ```bash
 docker compose up -d
 ```
