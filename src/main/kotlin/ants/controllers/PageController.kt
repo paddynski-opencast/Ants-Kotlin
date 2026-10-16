@@ -65,8 +65,7 @@ class PageController(
   fun connect(@RequestParam id: String, @RequestParam from: String, @RequestParam to: String): String? {
     return try {
       val network = service.getNetworkById(id)
-      network.connect(from.toInt(), to.toInt())
-      network.connect(to.toInt(), from.toInt())
+      network.connect(from.toInt(), to.toInt(), 0, -1)
       service.delete(id)
       show(service.storeNetwork(network).id)
     } catch (e: Exception) {

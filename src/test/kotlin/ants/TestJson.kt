@@ -69,17 +69,31 @@ class TestJson {
   )
 
   private fun network(): Network = Network().apply {
-    addNode(0); addNode(1); addNode(2); addNode(3); addNode(4); addNode(10)
-    connect(0, 1); connect(1, 2); connect(1, 3); connect(4, 1)
+    addNode(0)
+    addNode(1)
+    addNode(2)
+    addNode(3)
+    addNode(4)
+    addNode(10)
+    connect(0, 1)
+    connect(1, 2)
+    connect(1, 3)
+    connect(4, 1)
   }
 
   @Test
   fun testData() {
     val expected = ants.external.Network("")
-    expected.addNode(0); expected.addNode(1); expected.addNode(2); expected.addNode(3); expected.addNode(4); expected.addNode(
-      10
-    )
-    expected.connect(0, 1); expected.connect(1, 2); expected.connect(1, 3); expected.connect(4, 1)
+    expected.addNode(0)
+    expected.addNode(1)
+    expected.addNode(2)
+    expected.addNode(3)
+    expected.addNode(4)
+    expected.addNode(10)
+    expected.connect(0, 1)
+    expected.connect(1, 2)
+    expected.connect(1, 3)
+    expected.connect(4, 1)
     assertEquals(expected, Network(network()))
   }
 

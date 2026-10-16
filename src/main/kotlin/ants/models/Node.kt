@@ -14,8 +14,12 @@ class Node internal constructor(
       .filter { it.isValid() }
       .toMutableList()
 
-  internal fun connect(direction: Direction, node: Node, cost: Int) {
-    if (cost >= 0) connections.add(Connection(direction, node, cost))
+  internal fun connect(direction: Direction, node: Node, cost: Int): Boolean {
+    if (!connections.any { it.node == node && it.direction == direction} ) {
+      connections.add(Connection(direction, node, cost))
+      return true
+    }
+    return false
   }
 
   internal fun setClosed(closed: Boolean) {
@@ -31,6 +35,6 @@ class Node internal constructor(
   internal fun getConnectionData() =
     connections.asSequence().map { ants.external.Connection(id, it.node.id, it.direction, it.cost) }
 
-  fun getConnections() = connections.toSet()
-  fun isClosed() = closed
+  fun isClosed() =
+    closed
 }

@@ -70,9 +70,11 @@ class Network : ants.common.Network {
 
   override fun openMode(id: Int) = setNodeState(id, false)
 
-  override fun connect(from: Int, to: Int) = connect(from, to, mapOf(Direction.A to 0, Direction.B to 0))
+  override fun connect(from: Int, to: Int) =
+    connect(from, to, mapOf(Direction.A to 0, Direction.B to 0))
 
-  override fun connect(from: Int, to: Int, cost: Int) = connect(from, to, mapOf(Direction.A to cost))
+  override fun connect(from: Int, to: Int, cost: Int) =
+    connect(from, to, mapOf(Direction.A to cost))
 
   override fun connect(from: Int, to: Int, costA: Int, costB: Int) =
     connect(from, to, mapOf(Direction.A to costA, Direction.B to costB))
@@ -82,11 +84,21 @@ class Network : ants.common.Network {
       val fromNode = getMode(from)
       val toNode = getMode(to)
       invalidCosts(costs.values)
-      costs[Direction.A]?.takeIf { it > INVALID }?.let { fromNode.connect(Direction.A, toNode, it) }
-      costs[Direction.B]?.takeIf { it > INVALID }?.let { toNode.connect(Direction.B, fromNode, it) }
+      costs[Direction.A]?.takeIf { it > INVALID }?.let {
+        connectNodes(fromNode, toNode, Direction.A, it)
+      }
+      costs[Direction.B]?.takeIf { it > INVALID }?.let {
+        connectNodes(toNode, fromNode, Direction.B, it)
+      }
       return
     }
     Errors.error(NetworkException.ERROR_CONNECT, "Cannot connect connect node to itself! - [$from]", from)
+  }
+
+  private fun connectNodes(from: Node, to: Node, direction: Direction, cost: Int) {
+    if (!from.connect(direction, to, cost)) {
+      Errors.error(NetworkException.ERROR_CONNECT, "Nodes already connected! $from - $to")
+    }
   }
 
   fun findPath(from: Int, to: Int): Optional<Path> {

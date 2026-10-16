@@ -90,9 +90,17 @@ open class Network : IRequest, IResponse, ants.common.Network {
     if (to != from && nodeExists(from) && nodeExists(to)) {
       invalidCosts(costs.values)
       costs[Direction.A]?.takeIf { it > INVALID }
-        ?.let { connections.add(Connection(from, to, Direction.A, it)) }
+        ?.let { addConnection(Connection(from, to, Direction.A, it)) }
       costs[Direction.B]?.takeIf { it > INVALID }
-        ?.let { connections.add(Connection(to, from, Direction.B, it)) }
+        ?.let { addConnection(Connection(to, from, Direction.B, it)) }
+      return
+    }
+    Errors.cannotCreate(Connection::class.java)
+  }
+
+  private fun addConnection(connection: Connection) {
+    if (countConnections(connection.from, connection.to, connection.direction) == 0) {
+      connections.add(connection)
       return
     }
     Errors.cannotCreate(Connection::class.java)
@@ -132,8 +140,12 @@ open class Network : IRequest, IResponse, ants.common.Network {
         }.filter { (_, list) -> list.size > 1 }
           .keys.toList()
         if (duplicateIds.isEmpty()) {
-          val invalid = connections.any {
+          var invalid = connections.any {
             it.from == it.to || !ids.contains(it.from) || !ids.contains(it.to) || it.cost < 0
+          }
+          if (!invalid) {
+            val counts = connections.map { countConnections(it.from, it.to, it.direction) }
+            invalid = counts.any { it > 1 }
           }
           if (invalid) {
             throw NetworkException("Invalid connection!", ERROR_INVALID, listOf())
@@ -146,4 +158,8 @@ open class Network : IRequest, IResponse, ants.common.Network {
       }
     }
   }
+
+  private fun countConnections(from: Int, to: Int, direction: Direction) =
+    connections.count { it.from == from && it.to == to && it.direction == direction }
+
 }

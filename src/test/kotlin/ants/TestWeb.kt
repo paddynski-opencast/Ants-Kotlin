@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class TestWeb {
+
   @LocalServerPort
   var port: Int = 0
 
@@ -36,7 +37,8 @@ class TestWeb {
   private fun get(id: String) =
     restTemplate.getForObject("http://localhost:$port${NetworkController.GETPATHS}?id=$id", String::class.java)
 
-  private fun withoutWhitespace(value: String) = value.replace("\\s".toRegex(), "")
+  private fun withoutWhitespace(value: String) =
+    value.replace("\\s".toRegex(), "")
 
   @Test
   fun testOk() {
