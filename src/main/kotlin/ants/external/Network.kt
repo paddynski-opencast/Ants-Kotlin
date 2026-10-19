@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets
 import java.util.*
 
 open class Network : IRequest, IResponse, ants.common.Network {
+
   @JsonProperty
   var name: String
 

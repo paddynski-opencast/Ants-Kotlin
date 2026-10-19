@@ -5,6 +5,7 @@ import ants.common.NetworkException.Companion.ERROR_INVALID
 import com.fasterxml.jackson.annotation.JsonProperty
 
 open class Search() {
+
   @JsonProperty
   @JvmField
   protected var from: Int = ants.common.Network.INVALID

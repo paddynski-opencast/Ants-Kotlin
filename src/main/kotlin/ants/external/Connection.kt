@@ -4,6 +4,7 @@ import ants.common.Direction
 import com.fasterxml.jackson.annotation.JsonProperty
 
 class Connection() : ants.common.Connection {
+
   @JsonProperty
   var from: Int = 0
 

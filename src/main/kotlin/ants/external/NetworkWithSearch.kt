@@ -6,6 +6,7 @@ import ants.common.NetworkException.Companion.ERROR_INVALID
 import com.fasterxml.jackson.annotation.JsonProperty
 
 class NetworkWithSearch : Network {
+
   @JsonProperty
   val searches = mutableListOf<Search>()
 
