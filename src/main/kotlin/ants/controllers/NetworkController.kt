@@ -84,6 +84,10 @@ class NetworkController(
                                 {
                                   "id": 1,
                                   "closed": false
+                                },
+                                {
+                                  "id": 2,
+                                  "closed": false
                                 }
                               ],
                               "connections": [
@@ -92,12 +96,24 @@ class NetworkController(
                                   "to": 1,
                                   "direction": "A",
                                   "cost": 0
+                                },
+                                {
+                                  "from": 1,
+                                  "to": 2,
+                                  "direction": "A",
+                                  "cost": 0
+                                },
+                                {
+                                  "from": 0,
+                                  "to": 2,
+                                  "direction": "A",
+                                  "cost": 1
                                 }
                               ],
                               "searches": [
                                 {
                                   "from": 0,
-                                  "to": 1
+                                  "to": 2
                                 }
                               ]
                             }
