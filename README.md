@@ -23,5 +23,5 @@ You may also use the simple interface mentioned above.
 
 ### Code
 
-You can find the code on GitHun at https://github.com/paddynski-opencast/Ants-Kotlin.
+You can find the code on GitHub at https://github.com/paddynski-opencast/Ants-Kotlin.
 
