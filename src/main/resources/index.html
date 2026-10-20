@@ -7,44 +7,56 @@
     <hr>
     <a href="/">Reset</a>
     <hr>
+    <table width="100%">
+    <tr><td valign="top">
     <p>Network</p>
-    <pre>{network}</pre>
-    <hr>
-    <form action="/add" method="post">
-        <Input type="text" value="{id}" style="display: none;" name="id">
-        <button>Add Node</button>
-    </form>
-    <hr>
-    <form action="/connect" method="post">
-        <Input type="text" value="{id}" style="display: none;" name="id">
-        <table>
-            <tr>
-                <td>From</td>
-                <td><Input type="number" value="0" min="0" max="{max}" name="from"></td>
-            </tr>
-            <tr>
-                <td>To</td>
-                <td><Input type="number" value="0" min="0" max="{max}" name="to"></td>
-            </tr>
-        </table>
-        <p>
-        <button>Connect</button>
-    </form>
-    <hr>
-    <form action="/test" method="post">
-        <Input type="text" value="{id}" style="display: none;" name="id">
-        <table>
-            <tr>
-                <td>From</td>
-                <td><Input type="number" value="0" min="0" max="{max}" name="from"></td>
-            </tr>
-            <tr>
-                <td>To</td>
-                <td><Input type="number" value="0" min="0" max="{max}" name="to"></td>
-            </tr>
-        </table>
-        <p>
-        <button>Search</button>
-    </form>
+    <table border="1" bgcolor="green"><tr><td><pre>{network}</pre></td></tr></table>
+    </td><td valign="top">
+    <p>Actions</p>
+    <table width="100%" border="2">
+        <tr>
+            <td align="center" valign="middle">
+                <form action="/add" method="post">
+                    <Input type="text" value="{id}" style="display: none;" name="id">
+                    <button>Add Node</button>
+                </form>
+            </td>
+            <td valign="top">
+                <form action="/connect" method="post">
+                    <Input type="text" value="{id}" style="display: none;" name="id">
+                    <table>
+                        <tr>
+                            <td>From</td>
+                            <td><Input type="number" value="0" min="0" max="{max}" name="from"></td>
+                        </tr>
+                        <tr>
+                            <td>To</td>
+                            <td><Input type="number" value="0" min="0" max="{max}" name="to"></td>
+                        </tr>
+                    </table>
+                    <p>
+                    <button>Connect</button>
+                </form>
+            </td>
+            <td valign="top">
+                <form action="/test" method="post">
+                    <Input type="text" value="{id}" style="display: none;" name="id">
+                    <table>
+                        <tr>
+                            <td>From</td>
+                            <td><Input type="number" value="0" min="0" max="{max}" name="from"></td>
+                        </tr>
+                        <tr>
+                            <td>To</td>
+                            <td><Input type="number" value="0" min="0" max="{max}" name="to"></td>
+                        </tr>
+                    </table>
+                    <p>
+                    <button>Search</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+    </td></tr></table>
 </bodu>
 </html>
