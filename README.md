@@ -24,4 +24,4 @@ You may also use the simple interface mentioned above.
 ### Code
 
 You can find the code on GitHub at https://github.com/paddynski-opencast/Ants-Kotlin.
-
+Please raise pull requests if you want to make changes.
