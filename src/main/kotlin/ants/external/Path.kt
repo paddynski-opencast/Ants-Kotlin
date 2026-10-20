@@ -22,7 +22,8 @@ class Path() : Search() {
   constructor(search: Search, network: Network) : this() {
     from = search.getFrom()
     to = search.getTo()
-    val findPath = network.findPath(from, to)
+    optimization = search.getOptimization()
+    val findPath = network.findPath(from, to, search.getOptimization())
     path = findPath.map { it.getNodes().map { node -> node.id } }.orElse(NO_PATH)
     direction = findPath.map { it.getDirection().toString() }.orElse(NO_DIRECTION)
     cost = findPath.map { it.getCost() }.orElse(NO_COST)

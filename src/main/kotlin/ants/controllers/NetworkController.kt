@@ -113,7 +113,8 @@ class NetworkController(
                               "searches": [
                                 {
                                   "from": 0,
-                                  "to": 2
+                                  "to": 2,
+                                  "optimization": "N"
                                 }
                               ]
                             }

@@ -3,6 +3,7 @@ package ants.models
 import ants.common.Direction
 import ants.common.Errors
 import ants.common.NetworkException
+import ants.common.Optimization
 import java.util.*
 
 class Network : ants.common.Network {
@@ -101,18 +102,26 @@ class Network : ants.common.Network {
     }
   }
 
-  fun findPath(from: Int, to: Int): Optional<Path> {
+  fun findPath(from: Int, to: Int, optimization: Optimization = Optimization.C): Optional<Path> {
     val fromNode = getMode(from)
     val toNode = getMode(to)
     if (fromNode.isClosed() || toNode.isClosed()) return Optional.empty()
     if (fromNode === toNode) return Optional.of(Path(fromNode))
-    if (ants != 0) return Network(this).findPath(from, to)
+    if (ants != 0) return Network(this).findPath(from, to, optimization)
     paths.clear()
     Ant(this, fromNode, toNode, Direction.A)
     Ant(this, fromNode, toNode, Direction.B)
     while (ants > 0) Thread.yield()
-    val cost = paths.minOfOrNull(Path::getCost) ?: 0
-    return Optional.ofNullable(paths.firstOrNull { it.getCost() == cost })
+    return when(optimization) {
+      Optimization.C -> {
+        val cost = paths.minOfOrNull { it.getCost() } ?: 0
+        Optional.ofNullable(paths.firstOrNull { it.getCost() == cost })
+      }
+      Optimization.N -> {
+        val min = paths.minOfOrNull { it.getNodes().size } ?: 0
+        Optional.ofNullable(paths.firstOrNull { it.getNodes().size == min })
+      }
+    }
   }
 
   override fun toString() = name
