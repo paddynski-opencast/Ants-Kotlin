@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.util.Optional
 
 @Hidden
 @RestController
@@ -21,10 +22,15 @@ class PageController(
 ) : AbstractController() {
 
   @RequestMapping(method = [RequestMethod.GET], path = ["/"])
-  fun index(): String? {
+  fun index(@RequestParam reset: Optional<String>): String? {
     return try {
       val network = Network("Test")
       service.delete(network.id())
+      if (reset.isEmpty) {
+        network.addNode(0)
+        network.addNode(1)
+        network.connect(0, 1, 0, -1)
+      }
       val id = service.storeNetwork(network)
       show(id.id)
     } catch (e: Exception) {
