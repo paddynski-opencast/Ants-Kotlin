@@ -1,33 +1,31 @@
 package ants.external
 
 import ants.models.Network
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
 class Path() {
-  companion object {
-    private val NO_PATH = emptyList<Int>()
-    private const val NO_DIRECTION = ""
-    private const val NO_COST = -1
-  }
 
   @JsonProperty
   private var search: Search = Search()
 
   @JsonProperty
-  private var path: List<Int>? = NO_PATH
+  private var path: List<Int>? = null
 
   @JsonProperty
-  private var direction: String? = NO_DIRECTION
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private var direction: String? = null
 
   @JsonProperty
-  private var cost: Int? = NO_COST
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private var cost: Int? = null
 
   constructor(search: Search, network: Network) : this() {
     this.search = search
     val findPath = network.findPath(search.getFrom(), search.getTo(), search.getOptimization())
-    path = findPath.map { it.getNodes().map { node -> node.id } }.orElse(NO_PATH)
-    direction = findPath.map { it.getDirection().toString() }.orElse(NO_DIRECTION)
-    cost = findPath.map { it.getCost() }.orElse(NO_COST)
+    path = findPath.map { it.getNodes().map { node -> node.id } }.orElse(emptyList())
+    direction = findPath.map { it.getDirection().toString() }.orElse(null)
+    cost = findPath.map { it.getCost() }.orElse(null)
   }
 
   fun isSameAs(other: Path) =
