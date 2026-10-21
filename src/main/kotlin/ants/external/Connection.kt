@@ -18,7 +18,10 @@ class Connection() : ants.common.Connection {
   var cost: Int = 0
 
   constructor(from: Int, to: Int, direction: Direction, cost: Int?) : this() {
-    this.from = from; this.to = to; this.direction = direction; this.cost = cost ?: 0
+    this.from = from
+    this.to = to
+    this.direction = direction
+    this.cost = cost ?: 0
   }
 
   override fun equals(other: Any?) =

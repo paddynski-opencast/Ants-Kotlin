@@ -46,7 +46,7 @@ class TestExceptionsForExternal {
   @Test
   fun testNoConnectToSelf() {
     assertThrows<NetworkException> { network().apply {
-      addNode(0);
+      addNode(0)
       connect(0, 0)
     }}
   }

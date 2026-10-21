@@ -22,7 +22,8 @@ class TestSimpleNetwork {
   @Test
   fun testNoPath() {
     val network = Network()
-    network.addNode(0); network.addNode(1)
+    network.addNode(0)
+    network.addNode(1)
     assertTrue(network.findPath(0, 1).isEmpty)
   }
 
