@@ -6,12 +6,12 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 @SpringBootApplication
 @EnableMongoRepositories
-class Main {
+class Ants {
   companion object {
 
     @JvmStatic
     fun main(args: Array<String>) {
-      runApplication<Main>(*args)
+      runApplication<Ants>(*args)
     }
   }
 }
