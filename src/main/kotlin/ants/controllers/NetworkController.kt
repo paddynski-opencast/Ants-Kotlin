@@ -29,18 +29,10 @@ class NetworkController(
   private val service: NetworkService,
   private val mapper: ObjectMapper
 ) {
-  companion object {
-    const val FINDPATHS = "/findPaths"
-    const val GETPATHS = "/getPaths"
-    const val GETNET = "/get"
-    const val FINDPATH = "/findPath"
-    const val STORE = "/store"
-    const val DEL = "/delete"
+  private val logger: Logger =
+    LogManager.getLogger(NetworkController::class.java)
 
-    private val logger: Logger = LogManager.getLogger(NetworkController::class.java)
-  }
-
-  @RequestMapping(method = [GET], path = [GETNET])
+  @RequestMapping(method = [GET], path = ["/get"])
   fun get(@RequestParam id: String): ResponseEntity<IResponse> {
     log(Id(id), false)
     return try {
@@ -52,7 +44,7 @@ class NetworkController(
     }
   }
 
-  @RequestMapping(method = [GET], path = [GETPATHS])
+  @RequestMapping(method = [GET], path = ["/getPaths"])
   fun getPaths(@RequestParam id: String): ResponseEntity<IResponse> {
     log(Id(id), false)
     return try {
@@ -64,7 +56,7 @@ class NetworkController(
     }
   }
 
-  @RequestMapping(method = [POST], path = [FINDPATHS])
+  @RequestMapping(method = [POST], path = ["/findPaths"])
   @Operation(
     requestBody = io.swagger.v3.oas.annotations.parameters.RequestBody(
       required = true,
@@ -137,7 +129,7 @@ class NetworkController(
     }
   }
 
-  @RequestMapping(method = [POST], path = [STORE])
+  @RequestMapping(method = [POST], path = ["/store"])
   @Operation(
     requestBody = io.swagger.v3.oas.annotations.parameters.RequestBody(
       required = true,
@@ -187,7 +179,7 @@ class NetworkController(
     }
   }
 
-  @RequestMapping(method = [GET], path = [FINDPATH])
+  @RequestMapping(method = [GET], path = ["/findPath"])
   fun findPath(@RequestParam id: String, @RequestParam from: Int, @RequestParam to: Int): ResponseEntity<IResponse> {
     log(IdWithSearch(id, from, to), false)
     return try {
@@ -199,7 +191,7 @@ class NetworkController(
     }
   }
 
-  @RequestMapping(method = [DELETE], path = [DEL])
+  @RequestMapping(method = [DELETE], path = ["/delete"])
   fun delete(@RequestParam id: String): ResponseEntity<IResponse> {
     log(Id(id), false)
     return try {

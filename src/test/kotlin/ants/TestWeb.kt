@@ -28,14 +28,14 @@ class TestWeb {
     val headers = HttpHeaders()
     headers.contentType = MediaType.APPLICATION_JSON
     return restTemplate.postForEntity(
-      "http://localhost:$port${NetworkController.FINDPATHS}",
+      "http://localhost:$port/findPaths",
       HttpEntity(payload, headers),
       String::class.java
     )
   }
 
   private fun get(id: String) =
-    restTemplate.getForObject("http://localhost:$port${NetworkController.GETPATHS}?id=$id", String::class.java)
+    restTemplate.getForObject("http://localhost:$port/getPaths?id=$id", String::class.java)
 
   private fun withoutWhitespace(value: String) =
     value.replace("\\s".toRegex(), "")
