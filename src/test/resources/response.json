@@ -2,9 +2,11 @@
   "id": "MTAzMzYxNjI5OQ==",
   "paths": [
     {
-      "from": 0,
-      "to": 1,
-      "optimization": "C",
+      "search": {
+        "from": 0,
+        "to": 1,
+        "optimization": "C"
+      },
       "path": [
         0,
         1

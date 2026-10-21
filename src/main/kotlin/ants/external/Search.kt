@@ -8,16 +8,13 @@ import com.fasterxml.jackson.annotation.JsonProperty
 open class Search() {
 
   @JsonProperty
-  @JvmField
-  protected var from: Int = ants.common.Network.INVALID
+  private var from: Int = ants.common.Network.INVALID
 
   @JsonProperty
-  @JvmField
-  protected var to: Int = ants.common.Network.INVALID
+  private var to: Int = ants.common.Network.INVALID
 
   @JsonProperty
-  @JvmField
-  protected var optimization: Optimization = Optimization.C
+  private var optimization: Optimization = Optimization.C
 
   constructor(from: Int, to: Int, optimization: Optimization = Optimization.C) : this() {
     this.from = from
@@ -40,4 +37,7 @@ open class Search() {
       throw NetworkException("Invalid Search!", ERROR_INVALID, invalidIds.map { it.toString() })
     }
   }
+
+  fun isSameAs(other: Search) =
+    from == other.from && to == other.to && optimization == other.optimization
 }

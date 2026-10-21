@@ -3,12 +3,15 @@ package ants.external
 import ants.models.Network
 import com.fasterxml.jackson.annotation.JsonProperty
 
-class Path() : Search() {
+class Path() {
   companion object {
     private val NO_PATH = emptyList<Int>()
-    private val NO_DIRECTION = ""
-    private val NO_COST = -1
+    private const val NO_DIRECTION = ""
+    private const val NO_COST = -1
   }
+
+  @JsonProperty
+  private var search: Search = Search()
 
   @JsonProperty
   private var path: List<Int>? = NO_PATH
@@ -20,17 +23,15 @@ class Path() : Search() {
   private var cost: Int? = NO_COST
 
   constructor(search: Search, network: Network) : this() {
-    from = search.getFrom()
-    to = search.getTo()
-    optimization = search.getOptimization()
-    val findPath = network.findPath(from, to, search.getOptimization())
+    this.search = search
+    val findPath = network.findPath(search.getFrom(), search.getTo(), search.getOptimization())
     path = findPath.map { it.getNodes().map { node -> node.id } }.orElse(NO_PATH)
     direction = findPath.map { it.getDirection().toString() }.orElse(NO_DIRECTION)
     cost = findPath.map { it.getCost() }.orElse(NO_COST)
   }
 
   fun isSameAs(other: Path) =
-    from == other.from && to == other.to && path.toString() == other.path.toString()
+    search.isSameAs(other.search) && path.toString() == other.path.toString()
 
   fun getPath() =
     path
