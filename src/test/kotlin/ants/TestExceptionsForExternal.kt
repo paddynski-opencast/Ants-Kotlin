@@ -10,7 +10,7 @@ class TestExceptionsForExternal {
   @Test
   fun testNoInvalidNodes() {
     assertThrows<NetworkException> {
-      network().getMode(0)
+      network().getNode(0)
     }
   }
 

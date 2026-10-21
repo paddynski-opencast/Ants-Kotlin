@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 class Node() : ants.common.Node() {
 
-  @JsonProperty
-  var id: Int = 0
+  @JsonProperty(required = true)
+  var id: Int = ants.common.Network.INVALID
 
   @JsonProperty
   var closed: Boolean = false

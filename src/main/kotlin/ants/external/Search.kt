@@ -7,10 +7,10 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 open class Search() {
 
-  @JsonProperty
+  @JsonProperty(required = true)
   private var from: Int = ants.common.Network.INVALID
 
-  @JsonProperty
+  @JsonProperty(required = true)
   private var to: Int = ants.common.Network.INVALID
 
   @JsonProperty

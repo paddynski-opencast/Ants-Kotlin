@@ -29,10 +29,11 @@ class Network : ants.common.Network {
     name = data.name
     data.nodes.forEach { addNode(it.id, it.closed) }
     data.connections.forEach {
-      connect(
-        it.from, it.to,
-        if (it.direction == Direction.A) it.cost else -1,
-        if (it.direction == Direction.B) it.cost else -1
+      connectNodes(
+        getNode(it.from),
+        getNode(it.to),
+        it.direction,
+        it.cost
       )
     }
   }
@@ -43,7 +44,7 @@ class Network : ants.common.Network {
 
   private fun getN(id: Int) = nodes.singleOrNull { it.id == id }
 
-  override fun getMode(id: Int): Node =
+  override fun getNode(id: Int): Node =
     getN(id) ?: run {
       Errors.doesNotExist(Node::class.java, id)
       throw AssertionError()
@@ -82,8 +83,8 @@ class Network : ants.common.Network {
 
   private fun connect(from: Int, to: Int, costs: Map<Direction, Int>) {
     if (to != from) {
-      val fromNode = getMode(from)
-      val toNode = getMode(to)
+      val fromNode = getNode(from)
+      val toNode = getNode(to)
       invalidCosts(costs.values)
       costs[Direction.A]?.takeIf { it > INVALID }?.let {
         connectNodes(fromNode, toNode, Direction.A, it)
@@ -103,8 +104,8 @@ class Network : ants.common.Network {
   }
 
   fun findPath(from: Int, to: Int, optimization: Optimization = Optimization.C): Optional<Path> {
-    val fromNode = getMode(from)
-    val toNode = getMode(to)
+    val fromNode = getNode(from)
+    val toNode = getNode(to)
     if (fromNode.isClosed() || toNode.isClosed()) return Optional.empty()
     if (fromNode === toNode) return Optional.of(Path(fromNode))
     if (ants != 0) return Network(this).findPath(from, to, optimization)

@@ -10,13 +10,13 @@ import java.util.*
 
 open class Network : IRequest, IResponse, ants.common.Network {
 
-  @JsonProperty
+  @JsonProperty(required = true)
   var name: String
 
-  @JsonProperty
+  @JsonProperty(required = true)
   var nodes: MutableList<Node>
 
-  @JsonProperty
+  @JsonProperty(required = true)
   var connections: MutableList<Connection>
 
   constructor() : this("")
@@ -66,7 +66,7 @@ open class Network : IRequest, IResponse, ants.common.Network {
 
   override fun openMode(id: Int) = setNodeState(id, false)
 
-  override fun getMode(id: Int): ants.common.Node =
+  override fun getNode(id: Int): ants.common.Node =
     getN(id) ?: run {
       Errors.doesNotExist(Node::class.java, id)
       throw AssertionError()
@@ -139,8 +139,8 @@ open class Network : IRequest, IResponse, ants.common.Network {
       val ids = nodes.map { it.id }
       val negativeIds = ids.filter { it < 0 }
       if (negativeIds.isEmpty()) {
-        val duplicateIds = ids.associate { id ->
-          id to nodes.filter { it.id == id }
+        val duplicateIds = ids.associateWith { id ->
+          nodes.filter { it.id == id }
         }.filter { (_, list) -> list.size > 1 }
           .keys.toList()
         if (duplicateIds.isEmpty()) {

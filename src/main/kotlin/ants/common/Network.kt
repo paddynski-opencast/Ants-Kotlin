@@ -5,7 +5,7 @@ abstract class Network {
     const val INVALID = -1
   }
 
-  abstract fun getMode(id: Int): Node
+  abstract fun getNode(id: Int): Node
   abstract fun addNode(id: Int): Node
   abstract fun addNode(id: Int, closed: Boolean): Node
   abstract fun closeNode(id: Int)

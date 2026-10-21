@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 class NetworkWithSearch : Network {
 
-  @JsonProperty
+  @JsonProperty(required = true)
   val searches = mutableListOf<Search>()
 
   constructor() : super()

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 open class Id() : IRequest, IResponse {
 
-  @JsonProperty
+  @JsonProperty(required = true)
   var id: String = ""
 
   constructor(id: String) : this() {

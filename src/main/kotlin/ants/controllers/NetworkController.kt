@@ -107,6 +107,11 @@ class NetworkController(
                                   "from": 0,
                                   "to": 2,
                                   "optimization": "N"
+                                },
+                                {
+                                  "from": 0,
+                                  "to": 2,
+                                  "optimization": "C"
                                 }
                               ]
                             }
