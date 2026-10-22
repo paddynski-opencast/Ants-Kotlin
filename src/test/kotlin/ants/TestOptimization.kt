@@ -27,13 +27,17 @@ class TestOptimization {
 
     network.connect(0, 1, 0, -1)
     network.connect(1, 2, 0, -1)
+
     network.connect(0, 3, 1, -1)
     network.connect(3, 2, 1, -1)
+
     network.connect(0, 4, 1, -1)
     network.connect(4, 5, 1, -1)
     network.connect(5, 2, 1, -1)
+
     network.connect(0, 6, 1, -1)
     network.connect(6, 2, 1, -1)
+
     network.connect(0, 7, 1, -1)
     network.connect(7, 8, 1, -1)
     network.connect(8, 9, 1, -1)
