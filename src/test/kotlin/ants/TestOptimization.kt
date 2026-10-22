@@ -17,17 +17,27 @@ class TestOptimization {
     n2 = network.addNode(1)
     n3 = network.addNode(2)
     network.addNode(3)
+    network.addNode(4)
+    network.addNode(5)
 
     network.connect(0, 1, 0, -1)
     network.connect(1, 2, 0, -1)
     network.connect(0, 2, 1, -1)
     network.connect(0, 3, 1, -1)
     network.connect(3, 2, 1, -1)
+    network.connect(0, 4, 1, -1)
+    network.connect(4, 5, 1, -1)
+    network.connect(5, 2, 1, -1)
   }
 
   @Test
   fun testCost() {
     setup()
+
+    // There are two paths with a cost of 0
+    // -  [0], [1], [2]
+    // -  [0], [4], [5], [2]
+    // The system will pick the route with the minimum number of notes
     val path = network.findPath(0, 2, Optimization.C).get()
     assertEquals(listOf(n1, n2, n3), path.getNodes())
     assertEquals(0, path.getCost())
