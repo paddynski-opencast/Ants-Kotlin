@@ -7,7 +7,7 @@ class NetworkException(
   val code: Int,
   val ids: List<String>
 ) : RuntimeException(message) {
-  fun getError() = Error(code, ids, message)
+  fun getError() = Error(code, if (ids.isEmpty()) null else ids, message)
 
   companion object {
     const val ERROR_INVALID = -1

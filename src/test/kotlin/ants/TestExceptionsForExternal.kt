@@ -68,5 +68,24 @@ class TestExceptionsForExternal {
       connect(0, 1)
       connect(0, 1)
     }}
+    assertThrows<NetworkException> { network().apply {
+      addNode(0)
+      addNode(1)
+
+      // We are trying to connect 0 to 1 in direction B
+      // when 0 is already connected to 1 in direction A
+      connect(0, 1, 0, -1)
+      connect(1, 0, -1, 0)
+    }}
+    assertThrows<NetworkException> { network().apply {
+      addNode(0)
+      addNode(1)
+
+      // We are trying to connect 0 to 1 in direction B
+      // when 0 is already connected to 1 in direction A
+      // and 1 is already connected to 0 in direction B
+      connect(0, 1)
+      connect(1, 0, -1, 0)
+    }}
   }
 }

@@ -103,7 +103,7 @@ open class Network : IRequest, IResponse, ants.common.Network {
     val from = connection.from
     val to = connection.to
     val direction = connection.direction
-    if (countConnections(from, to, direction) == 0 && countConnections(to, from, direction) == 0) {
+    if (countConnections(from, to, direction) == 0) {
       connections.add(connection)
       return
     }
@@ -129,12 +129,13 @@ open class Network : IRequest, IResponse, ants.common.Network {
   }
 
   open fun validate() {
-    if (nodes.size < 2 || connections.isEmpty()) {
-      val entity = when {
-        nodes.size < 2 -> "nodes"
-        else -> "connections"
-      }
-      throw NetworkException("Too few $entity!", ERROR_INVALID, listOf())
+    val entity = when {
+      nodes.size < 2 -> "node"
+      connections.isEmpty() -> "connection"
+      else -> ""
+    }
+    if (entity != "") {
+      throw NetworkException("Too few ${entity}s!", ERROR_INVALID, listOf())
     } else {
       val ids = nodes.map { it.id }
       val negativeIds = ids.filter { it < 0 }
@@ -151,10 +152,6 @@ open class Network : IRequest, IResponse, ants.common.Network {
             val counts = connections.map { countConnections(it.from, it.to, it.direction) }
             invalid = counts.any { it > 1 }
           }
-          if (!invalid) {
-            val counts = connections.map { countConnections(it.to, it.from, it.direction) }
-            invalid = counts.any { it > 0 }
-          }
           if (invalid) {
             throw NetworkException("Invalid connection!", ERROR_INVALID, listOf())
           }
@@ -168,6 +165,7 @@ open class Network : IRequest, IResponse, ants.common.Network {
   }
 
   private fun countConnections(from: Int, to: Int, direction: Direction) =
-    connections.count { it.from == from && it.to == to && it.direction == direction }
+    connections.count { it.from == from && it.to == to } +
+      connections.count { it.from == to && it.to == from && it.direction == direction }
 
 }
