@@ -65,8 +65,8 @@ class TestExceptionsForModel {
     assertThrows<NetworkException> { network().apply {
       addNode(0)
       addNode(1)
-      connect(0, 1)
-      connect(0, 1)
+      connect(0, 1, 0, -1)
+      connect(1, 0, -1, 0)
     }}
   }
 }

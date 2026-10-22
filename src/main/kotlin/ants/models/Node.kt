@@ -15,7 +15,7 @@ class Node internal constructor(
       .toMutableList()
 
   internal fun connect(direction: Direction, node: Node, cost: Int): Boolean {
-    if (!hasConnectionTo(node, direction) && !node.hasConnectionTo(this, direction)) {
+    if (!hasConnectionTo(node) && !node.hasConnectionTo(this, direction)) {
       connections.add(Connection(direction, node, cost))
       return true
     }
@@ -38,6 +38,8 @@ class Node internal constructor(
   fun isClosed() =
     closed
 
-  private fun hasConnectionTo(node: Node, direction: Direction): Boolean =
-    connections.any { it.node == node && it.direction == direction }
+  private fun hasConnectionTo(node: Node, direction: Direction? = null): Boolean =
+    connections.any {
+      (it.node == node) && ((direction == null) || (it.direction == direction))
+    }
 }
