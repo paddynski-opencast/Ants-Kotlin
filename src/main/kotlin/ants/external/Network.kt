@@ -129,12 +129,12 @@ open class Network : IRequest, IResponse, ants.common.Network {
   }
 
   open fun validate() {
-    if (nodes.isEmpty() || connections.isEmpty()) {
-      val error = when {
-        nodes.isEmpty() -> "No nodes"
-        else -> "No connections"
+    if (nodes.size < 2 || connections.isEmpty()) {
+      val entity = when {
+        nodes.size < 2 -> "nodes"
+        else -> "connections"
       }
-      throw NetworkException("$error!", ERROR_INVALID, listOf())
+      throw NetworkException("Too few $entity!", ERROR_INVALID, listOf())
     } else {
       val ids = nodes.map { it.id }
       val negativeIds = ids.filter { it < 0 }
