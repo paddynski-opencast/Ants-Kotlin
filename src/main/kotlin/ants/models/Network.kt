@@ -115,7 +115,7 @@ class Network : ants.common.Network {
     while (ants > 0) Thread.yield()
     val returnPaths = when(optimization) {
       Optimization.C -> optimizeOnNodes(optimizeOnCost(paths))
-      Optimization.N -> optimizeOnNodes(paths)
+      Optimization.N -> optimizeOnCost(optimizeOnNodes(paths))
     }
     return Optional.ofNullable(returnPaths.getOrNull(0))
   }
