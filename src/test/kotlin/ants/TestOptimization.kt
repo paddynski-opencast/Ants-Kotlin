@@ -16,10 +16,13 @@ class TestOptimization {
     n1 = network.addNode(0)
     n2 = network.addNode(1)
     n3 = network.addNode(2)
+    network.addNode(3)
 
     network.connect(0, 1, 0, -1)
     network.connect(1, 2, 0, -1)
     network.connect(0, 2, 1, -1)
+    network.connect(0, 3, 1, -1)
+    network.connect(3, 2, 1, -1)
   }
 
   @Test

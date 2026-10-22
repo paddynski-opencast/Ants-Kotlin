@@ -113,16 +113,21 @@ class Network : ants.common.Network {
     Ant(this, fromNode, toNode, Direction.A)
     Ant(this, fromNode, toNode, Direction.B)
     while (ants > 0) Thread.yield()
-    return when(optimization) {
-      Optimization.C -> {
-        val cost = paths.minOfOrNull { it.getCost() } ?: 0
-        Optional.ofNullable(paths.firstOrNull { it.getCost() == cost })
-      }
-      Optimization.N -> {
-        val min = paths.minOfOrNull { it.getNodes().size } ?: 0
-        Optional.ofNullable(paths.firstOrNull { it.getNodes().size == min })
-      }
+    val returnPaths = when(optimization) {
+      Optimization.C -> optimizeOnNodes(optimizeOnCost(paths))
+      Optimization.N -> optimizeOnCost(optimizeOnNodes(paths))
     }
+    return Optional.ofNullable(returnPaths.getOrNull(0))
+  }
+
+  private fun optimizeOnCost(paths: List<Path>): List<Path> {
+    val cost = paths.minOfOrNull { it.getCost() } ?: 0
+    return paths.filter { it.getCost() == cost }
+  }
+
+  private fun optimizeOnNodes(paths: List<Path>): List<Path> {
+    val min = paths.minOfOrNull { it.getNodes().size } ?: 0
+    return paths.filter { it.getNodes().size == min }
   }
 
   override fun toString() = name
