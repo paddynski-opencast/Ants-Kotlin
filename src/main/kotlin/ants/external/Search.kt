@@ -14,9 +14,9 @@ open class Search() {
   private var to: Int = ants.common.Network.INVALID
 
   @JsonProperty
-  private var optimization: Optimization = Optimization.C
+  private var optimization: Optimization = Optimization.CS
 
-  constructor(from: Int, to: Int, optimization: Optimization = Optimization.C) : this() {
+  constructor(from: Int, to: Int, optimization: Optimization = Optimization.CS) : this() {
     this.from = from
     this.to = to
     this.optimization = optimization

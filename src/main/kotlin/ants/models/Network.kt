@@ -103,7 +103,7 @@ class Network : ants.common.Network {
     }
   }
 
-  fun findPath(from: Int, to: Int, optimization: Optimization = Optimization.C): Optional<Path> {
+  fun findPath(from: Int, to: Int, optimization: Optimization = Optimization.CS): Optional<Path> {
     val fromNode = getNode(from)
     val toNode = getNode(to)
     if (fromNode.isClosed() || toNode.isClosed()) return Optional.empty()
@@ -114,8 +114,10 @@ class Network : ants.common.Network {
     Ant(this, fromNode, toNode, Direction.B)
     while (ants > 0) Thread.yield()
     val returnPaths = when(optimization) {
-      Optimization.C -> optimizeOnNodes(optimizeOnCost(paths))
-      Optimization.N -> optimizeOnCost(optimizeOnNodes(paths))
+      Optimization.CS -> optimizeOnShortest(optimizeOnCost(paths))
+      Optimization.CL -> optimizeOnLongest(optimizeOnCost(paths))
+      Optimization.SC -> optimizeOnCost(optimizeOnShortest(paths))
+      Optimization.LC -> optimizeOnCost(optimizeOnLongest(paths))
     }
     return Optional.ofNullable(returnPaths.getOrNull(0))
   }
@@ -125,9 +127,14 @@ class Network : ants.common.Network {
     return paths.filter { it.getCost() == cost }
   }
 
-  private fun optimizeOnNodes(paths: List<Path>): List<Path> {
+  private fun optimizeOnShortest(paths: List<Path>): List<Path> {
     val min = paths.minOfOrNull { it.getNodes().size } ?: 0
     return paths.filter { it.getNodes().size == min }
+  }
+
+  private fun optimizeOnLongest(paths: List<Path>): List<Path> {
+    val max = paths.maxOfOrNull { it.getNodes().size } ?: 0
+    return paths.filter { it.getNodes().size == max }
   }
 
   override fun toString() = name

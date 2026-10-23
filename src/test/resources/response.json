@@ -5,7 +5,7 @@
       "search": {
         "from": 0,
         "to": 1,
-        "optimization": "C"
+        "optimization": "CS"
       },
       "path": [
         0,

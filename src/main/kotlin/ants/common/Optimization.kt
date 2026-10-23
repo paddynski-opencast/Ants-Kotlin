@@ -1,6 +1,8 @@
 package ants.common
 
 enum class Optimization {
-  C,
-  N
+  CS,
+  CL,
+  SC,
+  LC
 }
