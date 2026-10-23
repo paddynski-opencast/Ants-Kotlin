@@ -114,27 +114,36 @@ class Network : ants.common.Network {
     Ant(this, fromNode, toNode, Direction.B)
     while (ants > 0) Thread.yield()
     val returnPaths = when(optimization) {
-      Optimization.CS -> optimizeOnShortest(optimizeOnCost(paths))
-      Optimization.CL -> optimizeOnLongest(optimizeOnCost(paths))
-      Optimization.SC -> optimizeOnCost(optimizeOnShortest(paths))
-      Optimization.LC -> optimizeOnCost(optimizeOnLongest(paths))
+      Optimization.CS -> optimizeOnShortest(optimizeOnMinCost(paths))
+      Optimization.CL -> optimizeOnLongest(optimizeOnMinCost(paths))
+      Optimization.SC -> optimizeOnMinCost(optimizeOnShortest(paths))
+      Optimization.LC -> optimizeOnMinCost(optimizeOnLongest(paths))
+      Optimization.ES -> optimizeOnShortest(optimizeOnMaxCost(paths))
+      Optimization.EL -> optimizeOnLongest(optimizeOnMaxCost(paths))
+      Optimization.SE -> optimizeOnMaxCost(optimizeOnShortest(paths))
+      Optimization.LE -> optimizeOnMaxCost(optimizeOnLongest(paths))
     }
     return Optional.ofNullable(returnPaths.getOrNull(0))
   }
 
-  private fun optimizeOnCost(paths: List<Path>): List<Path> {
-    val cost = paths.minOfOrNull { it.getCost() } ?: 0
+  private fun optimizeOnMinCost(paths: List<Path>): List<Path> {
+    val cost = paths.minOfOrNull { it.getCost() } ?: INVALID
+    return paths.filter { it.getCost() == cost }
+  }
+
+  private fun optimizeOnMaxCost(paths: List<Path>): List<Path> {
+    val cost = paths.maxOfOrNull { it.getCost() } ?: INVALID
     return paths.filter { it.getCost() == cost }
   }
 
   private fun optimizeOnShortest(paths: List<Path>): List<Path> {
-    val min = paths.minOfOrNull { it.getNodes().size } ?: 0
-    return paths.filter { it.getNodes().size == min }
+    val nodes = paths.minOfOrNull { it.getNodes().size } ?: INVALID
+    return paths.filter { it.getNodes().size == nodes }
   }
 
   private fun optimizeOnLongest(paths: List<Path>): List<Path> {
-    val max = paths.maxOfOrNull { it.getNodes().size } ?: 0
-    return paths.filter { it.getNodes().size == max }
+    val nodes = paths.maxOfOrNull { it.getNodes().size } ?: INVALID
+    return paths.filter { it.getNodes().size == nodes }
   }
 
   override fun toString() = name

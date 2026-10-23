@@ -4,5 +4,9 @@ enum class Optimization {
   CS,
   CL,
   SC,
-  LC
+  LC,
+  ES,
+  EL,
+  SE,
+  LE
 }
