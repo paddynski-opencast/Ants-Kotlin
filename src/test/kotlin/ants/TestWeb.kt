@@ -35,7 +35,7 @@ class TestWeb {
   }
 
   private fun get(id: String) =
-    restTemplate.getForObject("http://localhost:$port/getPaths?id=$id", String::class.java)
+    restTemplate.getForObject("http://localhost:$port/getPaths/$id", String::class.java)
 
   private fun withoutWhitespace(value: String) =
     value.replace("\\s".toRegex(), "")
@@ -53,7 +53,7 @@ class TestWeb {
     val expected =
       withoutWhitespace(javaClass.getResourceAsStream("/response.json")!!.readAllBytes().toString(Charsets.UTF_8))
     val id = expected.substring(7, expected.indexOf("\"", 7))
-    restTemplate.delete("http://localhost:$port/delete?id=$id")
+    restTemplate.delete("http://localhost:$port/delete/$id")
     post()
     assertEquals(expected, get(id)!!)
   }

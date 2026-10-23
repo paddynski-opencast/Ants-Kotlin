@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.nio.charset.StandardCharsets
 import java.util.*
 
-open class Network : IRequest, IResponse, ants.common.Network {
+open class Network : Request, Response, ants.common.Network {
 
   @JsonProperty(required = true)
   var name: String

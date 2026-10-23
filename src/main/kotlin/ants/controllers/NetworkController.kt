@@ -1,7 +1,7 @@
 package ants.controllers
 
 import ants.common.NetworkException
-import ants.external.IResponse
+import ants.external.Response
 import ants.external.Id
 import ants.external.IdWithSearch
 import ants.external.Network
@@ -19,6 +19,8 @@ import org.apache.logging.log4j.Logger
 import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod.*
 import org.springframework.web.bind.annotation.RequestParam
@@ -32,25 +34,25 @@ class NetworkController(
   private val logger: Logger =
     LogManager.getLogger(NetworkController::class.java)
 
-  @RequestMapping(method = [GET], path = ["/get"])
-  fun get(@RequestParam id: String): ResponseEntity<IResponse> {
+  @RequestMapping(method = [GET], path = ["/getNetwork/{id}"])
+  fun get(@PathVariable id: String): ResponseEntity<Response> {
     log(Id(id), false)
     return try {
       service.getNetworkById(id)
         .also { log(it, true) }
-        .let { ResponseEntity.ok<IResponse>(it) }
+        .let { ResponseEntity.ok<Response>(it) }
     } catch (e: NetworkException) {
       error(e)
     }
   }
 
-  @RequestMapping(method = [GET], path = ["/getPaths"])
-  fun getPaths(@RequestParam id: String): ResponseEntity<IResponse> {
+  @RequestMapping(method = [GET], path = ["/getPaths/{id}"])
+  fun getPaths(@PathVariable id: String): ResponseEntity<Response> {
     log(Id(id), false)
     return try {
       service.getPaths(id)
         .also { log(it, true) }
-        .let { ResponseEntity.ok<IResponse>(it) }
+        .let { ResponseEntity.ok<Response>(it) }
     } catch (e: NetworkException) {
       error(e)
     }
@@ -122,19 +124,19 @@ class NetworkController(
       ]
     )
   )
-  fun findPaths(@org.springframework.web.bind.annotation.RequestBody @Valid data: NetworkWithSearch): ResponseEntity<IResponse> {
+  fun findPaths(@RequestBody @Valid data: NetworkWithSearch): ResponseEntity<Response> {
     log(data, false)
     return try {
       data.validate()
       service.findPathsInData(data)
         .also { log(it, true) }
-        .let { ResponseEntity.ok<IResponse>(it) }
+        .let { ResponseEntity.ok<Response>(it) }
     } catch (e: NetworkException) {
       error(e)
     }
   }
 
-  @RequestMapping(method = [POST], path = ["/store"])
+  @RequestMapping(method = [POST], path = ["/storeNetwork"])
   @Operation(
     requestBody = io.swagger.v3.oas.annotations.parameters.RequestBody(
       required = true,
@@ -172,37 +174,37 @@ class NetworkController(
       ]
     )
   )
-  fun store(@org.springframework.web.bind.annotation.RequestBody @Valid data: Network): ResponseEntity<IResponse> {
+  fun store(@RequestBody @Valid data: Network): ResponseEntity<Response> {
     log(data, false)
     return try {
       data.validate()
       service.storeNetwork(data)
         .also { log(it, true) }
-        .let { ResponseEntity.ok<IResponse>(it) }
+        .let { ResponseEntity.ok<Response>(it) }
     } catch (e: NetworkException) {
       error(e)
     }
   }
 
-  @RequestMapping(method = [GET], path = ["/findPath"])
-  fun findPath(@RequestParam id: String, @RequestParam from: Int, @RequestParam to: Int): ResponseEntity<IResponse> {
+  @RequestMapping(method = [GET], path = ["/findPath/{id}"])
+  fun findPath(@PathVariable id: String, @RequestParam from: Int, @RequestParam to: Int): ResponseEntity<Response> {
     log(IdWithSearch(id, from, to), false)
     return try {
       service.findPathsById(id, from, to)
         .also { log(it, true) }
-        .let { ResponseEntity.ok<IResponse>(it) }
+        .let { ResponseEntity.ok<Response>(it) }
     } catch (e: NetworkException) {
       error(e)
     }
   }
 
-  @RequestMapping(method = [DELETE], path = ["/delete"])
-  fun delete(@RequestParam id: String): ResponseEntity<IResponse> {
+  @RequestMapping(method = [DELETE], path = ["/deleteAll/{id}"])
+  fun delete(@PathVariable id: String): ResponseEntity<Response> {
     log(Id(id), false)
     return try {
       Status(service.delete(id))
         .also { log(it, true) }
-        .let { ResponseEntity.ok<IResponse>(it) }
+        .let { ResponseEntity.ok<Response>(it) }
     } catch (e: NetworkException) {
       error(e)
     }
@@ -217,7 +219,7 @@ class NetworkController(
     }
   }
 
-  private fun error(e: NetworkException): ResponseEntity<IResponse> {
+  private fun error(e: NetworkException): ResponseEntity<Response> {
     val error = e.getError()
     val code = when (error.code) {
       NOT_FOUND.value() -> error.code

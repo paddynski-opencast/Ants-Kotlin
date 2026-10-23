@@ -14,4 +14,4 @@ data class Error(
 
   @JsonProperty
   val message: String?
-) : IResponse
+) : Response

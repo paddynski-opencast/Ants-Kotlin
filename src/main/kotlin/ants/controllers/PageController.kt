@@ -1,6 +1,6 @@
 package ants.controllers
 
-import ants.external.IResponse
+import ants.external.Response
 import ants.external.Network
 import ants.external.NetworkWithSearch
 import ants.service.NetworkService
@@ -41,7 +41,7 @@ class PageController(
   @RequestMapping(method = [RequestMethod.GET], path = ["/show/{id}"])
   fun show(@PathVariable id: String): String? {
     return try {
-      val response: IResponse? = controller.get(id).body
+      val response: Response? = controller.get(id).body
       val max = service.getNetworkById(id).nodes.size - 1
       getContents(
         "/index.html", mapOf(
@@ -84,7 +84,7 @@ class PageController(
     return try {
       val request = NetworkWithSearch(service.getNetworkById(id))
       request.addSearch(from.toInt(), to.toInt())
-      val response: IResponse? = controller.findPaths(request).body
+      val response: Response? = controller.findPaths(request).body
       getContents(
         "/test.html", mapOf(
           "id" to id,

@@ -2,7 +2,7 @@ package ants.external
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-class Status : IResponse {
+class Status : Response {
 
   @JsonProperty
   var status: Boolean = false
