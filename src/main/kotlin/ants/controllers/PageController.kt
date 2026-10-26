@@ -25,7 +25,7 @@ class PageController(
   fun index(@RequestParam reset: Optional<String>): String? {
     return try {
       val network = Network("Test")
-      service.delete(network.id())
+      service.deleteAll(network.id())
       if (reset.isEmpty) {
         network.addNode(0)
         network.addNode(1)
@@ -59,7 +59,7 @@ class PageController(
   fun add(@RequestParam id: String): String? {
     return try {
       val network = service.getNetworkById(id)
-      service.delete(id)
+      service.deleteAll(id)
       network.addNode(network.nodes.size)
       show(service.storeNetwork(network).id)
     } catch (e: Exception) {
@@ -72,7 +72,7 @@ class PageController(
     return try {
       val network = service.getNetworkById(id)
       network.connect(from.toInt(), to.toInt(), 0, -1)
-      service.delete(id)
+      service.deleteAll(id)
       show(service.storeNetwork(network).id)
     } catch (e: Exception) {
       error(id, e)

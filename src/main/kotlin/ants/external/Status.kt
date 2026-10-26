@@ -5,9 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty
 class Status : Response {
 
   @JsonProperty
-  var status: Boolean = false
+  var networks: Int = 0
 
-  constructor(status: Boolean) {
-    this.status = status
+  @JsonProperty
+  var paths: Int = 0
+
+  constructor(networks: Int, paths: Int) {
+    this.networks = networks
+    this.paths = paths
   }
 }

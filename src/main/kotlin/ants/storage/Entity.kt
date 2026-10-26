@@ -27,7 +27,9 @@ abstract class Entity<T> {
       throw RuntimeException(e)
     }
 
-  fun getId() = id
-  fun getHash() = hash
-  fun getJson() = json
+  fun getId() =
+    id ?: ""
+
+  fun getHash() =
+    hash ?: ""
 }

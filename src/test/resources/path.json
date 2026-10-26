@@ -1,0 +1,18 @@
+{
+  "id": "MTAzMzYxNjI5OQ==",
+  "paths": [
+    {
+      "search": {
+        "from": 0,
+        "to": 1,
+        "optimization": "CS"
+      },
+      "path": [
+        0,
+        1
+      ],
+      "direction": "A",
+      "cost": 0
+    }
+  ]
+}

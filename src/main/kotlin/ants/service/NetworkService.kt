@@ -4,6 +4,7 @@ import ants.common.NetworkException
 import ants.external.Id
 import ants.external.NetworkWithSearch
 import ants.external.Paths
+import ants.external.Status
 import ants.models.Network
 import ants.storage.NetworkStore
 import ants.storage.PathStore
@@ -66,15 +67,16 @@ class NetworkService(
   }
 
   @Transactional
-  fun delete(id: String): Boolean {
+  fun deleteAll(id: String): Status {
     val networks = networkStore.findAllForHash(id)
-    if (networks.isEmpty()) return false
+    if (networks.isEmpty()) return Status(0, 0)
+    val paths = networks.sumOf { pathStore.findAllForHash(it.getHash()).size }
     networks.forEach { network ->
-      network.getId()?.let { networkStore.deleteById(it) }
-      pathStore.findAllForHash(network.getHash() ?: "")
+      network.getId().let { networkStore.deleteById(it) }
+      pathStore.findAllForHash(network.getHash())
         .mapNotNull { it.getId() }
         .let { pathStore.deleteAllById(it) }
     }
-    return true
+    return Status(networks.size, paths)
   }
 }

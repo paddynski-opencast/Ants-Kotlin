@@ -6,5 +6,5 @@ import org.springframework.data.repository.query.Param
 
 interface PathStore : MongoRepository<Path, String> {
   @Query("SELECT p from Path p WHERE hash = :hash")
-  fun findAllForHash(@Param("hash") hash: String): List<Path>
+  fun findAllForHash(@Param("hash") hash: String?): List<Path>
 }

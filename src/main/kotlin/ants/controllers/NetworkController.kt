@@ -202,7 +202,7 @@ class NetworkController(
   fun delete(@PathVariable id: String): ResponseEntity<Response> {
     log(Id(id), false)
     return try {
-      Status(service.delete(id))
+      service.deleteAll(id)
         .also { log(it, true) }
         .let { ResponseEntity.ok<Response>(it) }
     } catch (e: NetworkException) {
