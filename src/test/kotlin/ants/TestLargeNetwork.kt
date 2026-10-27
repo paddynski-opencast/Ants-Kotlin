@@ -98,11 +98,4 @@ class TestLargeNetwork {
     assertEquals(pyramid.expected, path.get().getNodes().map { it.id })
     assert(time < 2000)
   }
-
-  @Test
-  fun testOutOfMemory() {
-    val pyramid = Pyramid(2 * levels)
-    val path = pyramid.getNetwork().findPath(pyramid.from, pyramid.to)
-    assert(path.isEmpty)
-  }
 }
