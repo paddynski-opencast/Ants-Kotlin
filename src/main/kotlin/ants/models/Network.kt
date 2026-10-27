@@ -8,7 +8,7 @@ import java.util.*
 
 class Network : ants.common.Network {
   private val name: String
-  private var ants = 0
+  private var ants = mutableListOf<Ant>()
   private val nodes = mutableListOf<Node>()
   private val paths = mutableListOf<Path>()
 
@@ -108,11 +108,11 @@ class Network : ants.common.Network {
     val toNode = getNode(to)
     if (fromNode.isClosed() || toNode.isClosed()) return Optional.empty()
     if (fromNode === toNode) return Optional.of(Path(fromNode))
-    if (ants != 0) return Network(this).findPath(from, to, optimization)
+    if (ants.isNotEmpty()) return Network(this).findPath(from, to, optimization)
     paths.clear()
     Ant(this, fromNode, toNode, Direction.A)
     Ant(this, fromNode, toNode, Direction.B)
-    while (ants > 0) Thread.yield()
+    while (ants.isNotEmpty()) Thread.yield()
     val returnPaths = when(optimization) {
       Optimization.CS -> optimizeOnShortest(optimizeOnMinCost(paths))
       Optimization.CL -> optimizeOnLongest(optimizeOnMinCost(paths))
@@ -153,14 +153,21 @@ class Network : ants.common.Network {
   fun getConnectionData() = nodes.asSequence().flatMap(Node::getConnectionData).toList()
 
   @Synchronized
-  internal fun addAnt() {
-    ants++
+  internal fun addAnt(ant: Ant) {
+    ants.add(ant)
   }
 
   @Synchronized
   internal fun removeAnt(ant: Ant, hasReachedDestination: Boolean) {
     if (hasReachedDestination) paths.add(Path(ant))
-    ants--
+    ants.remove(ant)
+  }
+
+  @Synchronized
+  internal fun killAllAnts(ant: Ant) {
+    removeAnt(ant, false)
+    ants.forEach { it.interrupt() }
+    paths.clear()
   }
 
   fun getName() = name

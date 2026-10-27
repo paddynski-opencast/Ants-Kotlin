@@ -16,30 +16,40 @@ internal class Ant : Thread {
   val destination: Node
   val direction: Direction
   var cost: Int = 0
-    private set
 
   constructor(network: Network, start: Node, destination: Node, direction: Direction) {
     this.network = network
     this.pathNodes = Nodes(start)
     this.destination = destination
     this.direction = direction
-    network.addAnt()
     start()
   }
 
-  private constructor(parent: Ant, connection: Connection) {
+  private constructor(parent: Ant, connection: Connection, go: Boolean) {
     network = parent.network
     pathNodes = parent.pathNodes.copyAllButLast().also { it.addNode(connection.node) }
     destination = parent.destination
     direction = parent.direction
     cost = parent.cost + connection.cost
-    network.addAnt()
-    start()
+    if (go) start()
+  }
+
+  override fun start() {
+    try {
+      network.addAnt(this)
+      super.start()
+    } catch (_: OutOfMemoryError) {
+      network.killAllAnts(this)
+    }
   }
 
   override fun run() {
     var next = pathNodes.getLast()
     while (next != null && next !== destination) {
+      if (isInterrupted) {
+        network.removeAnt(this, false)
+        return
+      }
       val connections = next.getConnections(direction)
       if (connections.isEmpty()) {
         next = null
@@ -51,7 +61,7 @@ internal class Ant : Thread {
         }
         pathNodes.addNode(first.node)
         if (next !== destination) {
-          connections.forEach { Ant(this, it) }
+          connections.forEach { Ant(this, it, !isInterrupted) }
         }
         cost += first.cost
       }
