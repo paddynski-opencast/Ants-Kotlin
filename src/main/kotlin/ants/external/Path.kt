@@ -24,7 +24,7 @@ class Path() {
     this.search = search
     val findPath = network.findPath(search.getFrom(), search.getTo(), search.getOptimization())
     path = findPath.map { it.getNodes().map { node -> node.id } }.orElse(emptyList())
-    direction = findPath.map { it.getDirection().toString() }.orElse(null)
+    direction = findPath.map { it.getDirection()?.toString() }.orElse(null)
     cost = findPath.map { it.getCost() }.orElse(null)
   }
 
