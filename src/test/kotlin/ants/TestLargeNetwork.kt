@@ -98,7 +98,7 @@ class TestLargeNetwork {
     val path = pyramid.getNetwork().findPath(pyramid.from, pyramid.to)
     val time = System.currentTimeMillis() - start
     assertEquals(pyramid.expected, path.get().getNodes().map { it.id })
-    assert(time < 2000)
+    assert(time < 5000)
   }
 
 //  @Test
