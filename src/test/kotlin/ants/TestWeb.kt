@@ -1,6 +1,7 @@
 package ants
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -74,8 +75,12 @@ class TestWeb {
   private fun withoutWhitespace(value: String) =
     value.replace("\\s".toRegex(), "")
 
+  @BeforeEach
+  fun setup() {
+    findPaths()
+  }
+
   @Test
-  @Order(1)
   fun testStoreNetwork() {
     val response =
       withoutWhitespace(javaClass.getResourceAsStream("/id.json")!!.readAllBytes().toString(Charsets.UTF_8))
@@ -83,7 +88,6 @@ class TestWeb {
   }
 
   @Test
-  @Order(2)
   fun testFindPaths() {
     val response = findPaths()
     assertEquals(HttpStatusCode.valueOf(200), response.statusCode)
@@ -91,25 +95,21 @@ class TestWeb {
   }
 
   @Test
-  @Order(3)
   fun testGetPaths() {
     assertEquals(paths, getPaths(id)!!)
   }
 
   @Test
-  @Order(4)
   fun testGetNetwork() {
     assertEquals(network, getNetwork(id)!!)
   }
 
   @Test
-  @Order(5)
   fun testFindPath() {
     assertEquals(path, findPath(id, 0, 1)!!)
   }
 
   @Test
-  @Order(6)
   fun testDeleteAll() {
     assertEquals(status, deleteAll(id).body)
   }
