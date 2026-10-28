@@ -1,8 +1,10 @@
 package ants
 
+import ants.common.NetworkException
 import ants.models.Network
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import kotlin.random.Random
 
 class TestLargeNetwork {
@@ -98,4 +100,12 @@ class TestLargeNetwork {
     assertEquals(pyramid.expected, path.get().getNodes().map { it.id })
     assert(time < 2000)
   }
+
+//  @Test
+//  fun testOutOfMemory() {
+//    assertThrows<NetworkException> {
+//      val pyramid = Pyramid(3 * levels)
+//      pyramid.getNetwork().findPath(pyramid.from, pyramid.to)
+//    }
+//  }
 }

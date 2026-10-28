@@ -11,6 +11,7 @@ class Network : ants.common.Network {
   private var ants = mutableListOf<Ant>()
   private val nodes = mutableListOf<Node>()
   private val paths = mutableListOf<Path>()
+  private var antsHaveBeenKilled = false
 
   constructor(name: String) {
     this.name = name
@@ -110,20 +111,28 @@ class Network : ants.common.Network {
     if (fromNode === toNode) return Optional.of(Path(fromNode))
     if (ants.isNotEmpty()) return Network(this).findPath(from, to, optimization)
     paths.clear()
+    antsHaveBeenKilled = false
     Ant(this, fromNode, toNode, Direction.A)
     Ant(this, fromNode, toNode, Direction.B)
-    while (ants.isNotEmpty()) Thread.yield()
-    val returnPaths = when(optimization) {
-      Optimization.CS -> optimizeOnShortest(optimizeOnMinCost(paths))
-      Optimization.CL -> optimizeOnLongest(optimizeOnMinCost(paths))
-      Optimization.SC -> optimizeOnMinCost(optimizeOnShortest(paths))
-      Optimization.LC -> optimizeOnMinCost(optimizeOnLongest(paths))
-      Optimization.ES -> optimizeOnShortest(optimizeOnMaxCost(paths))
-      Optimization.EL -> optimizeOnLongest(optimizeOnMaxCost(paths))
-      Optimization.SE -> optimizeOnMaxCost(optimizeOnShortest(paths))
-      Optimization.LE -> optimizeOnMaxCost(optimizeOnLongest(paths))
+    while (ants.isNotEmpty()) {
+      Thread.yield()
     }
-    return Optional.ofNullable(returnPaths.getOrNull(0))
+    if (antsHaveBeenKilled) {
+      Errors.error(INVALID, "Out of memory!")
+      return Optional.empty()
+    } else {
+      val returnPaths = when (optimization) {
+        Optimization.CS -> optimizeOnShortest(optimizeOnMinCost(paths))
+        Optimization.CL -> optimizeOnLongest(optimizeOnMinCost(paths))
+        Optimization.SC -> optimizeOnMinCost(optimizeOnShortest(paths))
+        Optimization.LC -> optimizeOnMinCost(optimizeOnLongest(paths))
+        Optimization.ES -> optimizeOnShortest(optimizeOnMaxCost(paths))
+        Optimization.EL -> optimizeOnLongest(optimizeOnMaxCost(paths))
+        Optimization.SE -> optimizeOnMaxCost(optimizeOnShortest(paths))
+        Optimization.LE -> optimizeOnMaxCost(optimizeOnLongest(paths))
+      }
+      return Optional.ofNullable(returnPaths.getOrNull(0))
+    }
   }
 
   private fun optimizeOnMinCost(paths: List<Path>): List<Path> {
@@ -167,7 +176,7 @@ class Network : ants.common.Network {
   internal fun killAllAnts(ant: Ant) {
     removeAnt(ant, false)
     ants.forEach { it.interrupt() }
-    paths.clear()
+    antsHaveBeenKilled = true
   }
 
   fun getName() = name
